@@ -16,14 +16,15 @@ import psycopg2
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-POSTGRES_URL="postgres://postgres.gjfzuxjpwffobrmyeahd:SmAl0uSmfDZQTeUJ@aws-0-us-east-1.pooler.supabase.com:6543/postgres?sslmode=require&supa=base-pooler.x"
-POSTGRES_USER="postgres"
-POSTGRES_HOST="db.gjfzuxjpwffobrmyeahd.supabase.co"
-SUPABASE_JWT_SECRET="7UhF7gylap+RMVJQYzJrNjQDEiAeoO6vSrqdx1jHqOqAvbU4HDEJCO9tH1AxDtgVqCcWDjTGE6va5Dz7m4/JqA=="
-NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdqZnp1eGpwd2Zmb2JybXllYWhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM2MzI2MjgsImV4cCI6MjA2OTIwODYyOH0.SscgO3o168DwZzKx7dMJ6hxsptQizshs2UmzYaC7FhA"
-POSTGRES_PRISMA_URL="postgres://postgres.gjfzuxjpwffobrmyeahd:SmAl0uSmfDZQTeUJ@aws-0-us-east-1.pooler.supabase.com:6543/postgres?sslmode=require&pgbouncer=true"
-POSTGRES_PASSWORD="SmAl0uSmfDZQTeUJ"
-POSTGRES_DATABASE="postgres"
+POSTGRES_URL="postgres://neondb_owner:npg_7HdwZLu5orVp@ep-misty-mountain-ady75dv7-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require"
+POSTGRES_URL_NON_POOLING="postgres://neondb_owner:npg_7HdwZLu5orVp@ep-misty-mountain-ady75dv7.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require"
+POSTGRES_USER="neondb_owner"
+POSTGRES_HOST="ep-misty-mountain-ady75dv7-pooler.c-2.us-east-1.aws.neon.tech"
+POSTGRES_PASSWORD="npg_7HdwZLu5orVp"
+POSTGRES_DATABASE="neondb"
+POSTGRES_URL_NO_SSL="postgres://neondb_owner:npg_7HdwZLu5orVp@ep-misty-mountain-ady75dv7-pooler.c-2.us-east-1.aws.neon.tech/neondb"
+POSTGRES_PRISMA_URL="postgres://neondb_owner:npg_7HdwZLu5orVp@ep-misty-mountain-ady75dv7-pooler.c-2.us-east-1.aws.neon.tech/neondb?connect_timeout=15&sslmode=require"
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
