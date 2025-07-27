@@ -16,7 +16,6 @@ import psycopg2
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-BASE_DIR = Path(__file__).resolve().parent.parent
 POSTGRES_URL="postgres://postgres.gjfzuxjpwffobrmyeahd:SmAl0uSmfDZQTeUJ@aws-0-us-east-1.pooler.supabase.com:6543/postgres?sslmode=require&supa=base-pooler.x"
 POSTGRES_USER="postgres"
 POSTGRES_HOST="db.gjfzuxjpwffobrmyeahd.supabase.co"
@@ -68,7 +67,7 @@ ROOT_URLCONF = "school_portal.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, 'notebooks')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
