@@ -11,10 +11,20 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+import psycopg2
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+BASE_DIR = Path(__file__).resolve().parent.parent
+POSTGRES_URL="postgres://postgres.gjfzuxjpwffobrmyeahd:SmAl0uSmfDZQTeUJ@aws-0-us-east-1.pooler.supabase.com:6543/postgres?sslmode=require&supa=base-pooler.x"
+POSTGRES_USER="postgres"
+POSTGRES_HOST="db.gjfzuxjpwffobrmyeahd.supabase.co"
+SUPABASE_JWT_SECRET="7UhF7gylap+RMVJQYzJrNjQDEiAeoO6vSrqdx1jHqOqAvbU4HDEJCO9tH1AxDtgVqCcWDjTGE6va5Dz7m4/JqA=="
+NEXT_PUBLIC_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdqZnp1eGpwd2Zmb2JybXllYWhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM2MzI2MjgsImV4cCI6MjA2OTIwODYyOH0.SscgO3o168DwZzKx7dMJ6hxsptQizshs2UmzYaC7FhA"
+POSTGRES_PRISMA_URL="postgres://postgres.gjfzuxjpwffobrmyeahd:SmAl0uSmfDZQTeUJ@aws-0-us-east-1.pooler.supabase.com:6543/postgres?sslmode=require&pgbouncer=true"
+POSTGRES_PASSWORD="SmAl0uSmfDZQTeUJ"
+POSTGRES_DATABASE="postgres"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -25,7 +35,7 @@ SECRET_KEY = "django-insecure-5r-fa!1ng$vglt0%d+xv3q!&alf0bfwulo5yg^=5lm@%vdl+4u
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['school-portal-leonado10000.vercel.app','.vercel.app','192.168.0.187','*','172.20.10.7','192.168.208.13']
 
 
 # Application definition
@@ -78,10 +88,15 @@ WSGI_APPLICATION = "school_portal.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+        'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME' : POSTGRES_DATABASE,
+        'HOST': POSTGRES_HOST,
+        'URL': POSTGRES_URL,
+        'PRISMA_URL': POSTGRES_PRISMA_URL,
+        'USER': POSTGRES_USER,
+        'PASSWORD' : POSTGRES_PASSWORD
+    },
 }
 
 
