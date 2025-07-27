@@ -1,0 +1,47 @@
+{% include 'common/header.html' %}
+
+<style>
+    table, tr, td, th {
+        border-collapse: collapse;
+        border : 2px solid black;
+        padding: 5px;
+    }
+</style>
+
+<table>
+    <tr>
+        <td>Name</td>
+        <td><a href="{% url 'student_checks_detail' student.student_id %}">{{ student.name }}</a></td>
+    </tr>
+    <tr>
+        <td>Roll Number</td>
+        <td>{{ student.roll_number }}</td>
+    </tr>
+    <tr>
+        <td>Class</td>
+        <td>{{ student.batch.current_class }}</td>
+    </tr>
+</table>
+
+<table>
+    <thead>
+        <th>Submission ID</th>
+        <th>Subject</th>
+        <th>Teacher</th>
+        <th>Date Assigned</th>
+        <th>Checked Date</th>
+        <th>Incomplete Date</th>
+    </thead>
+{% for record in records %}
+    <tr>
+        <td><a href="{% url 'nb_checking' record.submission_id.submission_id %}">{{ record.submission_id.submission_id }}</a></td>
+        <td>{{ record.submission_id.associated_subject }}</td>
+        <td>{{ record.submission_id.associated_teacher }}</td>
+        <td>{{ record.submission_id.add_date }}</td>
+        <td>{{ record.checked_date }}</td>
+        <td>{{ record.incomplete_date }}</td>
+    </tr>
+{% endfor %}
+</table>
+
+{% include 'common/footer.html' %}

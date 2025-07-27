@@ -1,0 +1,37 @@
+<style>
+
+
+    .navbar {
+        background-color: #1e1e1e;
+        padding: 1rem 2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    .nav-links a {
+        color: #f0f0f0;
+        text-decoration: none;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        transition: background-color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+        background-color: #333;
+        color: #ffffff;
+    }
+
+</style>
+
+    <header class="navbar">
+        <nav class="nav-links">
+            <a href="{% url 'list_checks' %}">All Checks</a>
+            <a href="{% url 'student_checks_detail' 's_0001' %}">Students</a>
+            <a href="{% url 'nb_checking' 'sub_1' %}">New Checking</a>
+        </nav>
+    </header>
