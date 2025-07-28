@@ -1,0 +1,129 @@
+
+{% include 'common/header.html' %}
+
+<style>
+    table, tr, td, th {
+        border-collapse: collapse;
+        border : 2px solid black;
+        padding: 5px;
+    }
+</style>
+{{ submission_record }}
+
+{% if submission_record %}
+    <form action="{% url 'nb_checking' submission_record.submission_id %}" method="post">    
+{% else %}    
+    <form action="{% url 'nb_checking' 'new' %}" method="post">
+{% endif %}
+{% csrf_token %} 
+<table>
+    <thead>
+        <th>Submission ID</th>
+        <th>Teacher</th>
+        <th>Subject</th>
+        <th>Class</th>
+        <th>Date</th>
+    </thead>
+    <tr>
+        <td>
+            {{ submission_record.submission_id}}
+        </td>
+    
+        <td>
+            {{ teacher.name }}
+            <input type="hidden" name="associated_teacher" value="{{teacher.teacher_id}}">
+        </td>
+        <td>
+            {{ subject.name }}
+            <input type="hidden" name="associated_subject" value="{{subject.code}}">
+        </td>
+        <td> 
+            {{ batch.current_class }} 
+            <input type="hidden" name="associated_batch" value="{{batch.batch_id}}">
+        </td>
+        <td>
+            {{ submission_record.add_date|date:'Y-m-d' }}
+            <input type="hidden" name="check_date" value="{{submission_record.add_date|date:'Y-m-d'}}">
+        </td>
+    </tr>
+</table>
+
+<table>
+    <thead>
+        <th>Roll No.</th>
+        <th>Name</th>
+        <th>Completed given</th>
+        <th>Incomplete given</th>
+        <th>Date</th>
+    </thead>
+
+   
+        <input type="hidden" name="submit-check" value="submit-check-record">
+        <!-- Only works when adding new record -->
+        {% for student in students %}
+            <tr>
+                <td><a href="{% url 'student_checks_detail' student.student_id %}">{{ student.roll_number }}</a></td>
+                <td><a href="{% url 'student_checks_detail' student.student_id %}">{{ student.name }}</a></td>
+                <td><input type="checkbox" name="student-{{student.student_id}}-c-nb" oninput="add_check_date_func('{{student.student_id}}')" id="student-{{student.student_id}}-c">Checked</td>
+                <td><input type="checkbox" name="student-{{student.student_id}}-ic-nb" oninput="add_check_date_func('{{student.student_id}}')" id="student-{{student.student_id}}-ic">Incomplete</td>
+                <td><input type="date" name="student-{{student.student_id}}-date" id="student-{{student.student_id}}-date"></td>
+                <td><button type="button" onclick="remove_nb_date({{student.student_id}})" id="remove-nb-date-{{student.student_id}}">remove</button></td>
+            </tr>
+        {% endfor %}
+        <!-- Only works when updating records -->
+        {% for record in records %}
+            <tr>
+                <td><a href="{% url 'student_checks_detail' record.student.student_id %}">{{ record.student.roll_number }}</a></td>
+                <td><a href="{% url 'student_checks_detail' record.student.student_id %}">{{ record.student.name }}</a></td>
+
+                {% if record.checked_date %}
+                    <td><input checked="checked" type="checkbox" name="student-{{ record.student.student_id }}-c-nb" oninput="add_check_date_func('{{ record.student.student_id }}')" id="student-{{ record.student.student_id }}-c">Checked</td>
+                {% else %}
+                    <td><input type="checkbox" name="student-{{ record.student.student_id }}-c-nb" oninput="add_check_date_func('{{ record.student.student_id }}')" id="student-{{ record.student.student_id }}-c">Checked</td>
+                {% endif %}
+
+                {% if record.incomplete_date %}
+                    <td><input checked="checked" type="checkbox" name="student-{{ record.student.student_id }}-ic-nb" oninput="add_check_date_func('{{ record.student.student_id }}')" id="student-{{ record.student.student_id }}-ic">Incomplete</td>
+                {% else %}
+                    <td><input type="checkbox" name="student-{{ record.student.student_id }}-ic-nb" oninput="add_check_date_func('{{ record.student.student_id }}')" id="student-{{ record.student.student_id }}-ic">Incomplete</td>
+                {% endif %}
+
+                {% if record.checked_date %}
+                    <td><input type="date" name="student-{{ record.student.student_id }}-date" id="student-{{ record.student.student_id }}-date" value="{{ record.checked_date|date:'Y-m-d' }}"></td>
+                {% elif record.incomplete_date %}
+                    <td><input type="date" name="student-{{ record.student.student_id }}-date" id="student-{{ record.student.student_id }}-date" value="{{ record.incomplete_date|date:'Y-m-d' }}"></td>
+                {% else %}
+                    <td><input type="date" name="student-{{ record.student.student_id }}-date" id="student-{{ record.student.student_id }}-date"></td>
+                {% endif %}
+
+                <td><button type="button" onclick="remove_nb_date('{{record.student.student_id}}')" id="remove-nb-date-{{record.student.student_id}}">remove</button></td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td>
+                <button type="submit" value="go">Submit</button>
+            </td>
+        </tr>
+        
+    <script>
+        function add_check_date_func(student_id){
+            document.getElementById(`student-${student_id}-date`).valueAsDate = new Date();
+        }
+
+
+            // reset checkboxs and date
+        function remove_nb_date(student_id){
+            console.log('works',
+                document.getElementById(`student-${student_id}-c`)
+            )
+            document.getElementById(`student-${student_id}-c`).checked = false;
+            document.getElementById(`student-${student_id}-ic`).checked = false;
+            document.getElementById(`student-${student_id}-date`).value = '';
+        }
+    </script>
+</table>
+
+
+</form>
+
+{% include 'common/footer.html' %}
