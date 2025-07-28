@@ -4,7 +4,8 @@ from .models import Student, NotebookSubmission, SubmissionRecord, Subject, Teac
 
 print_arg = "\n sys: "
 def get_max_id_function(class_name:models.Model, id_name:str):
-    return max([int(vals[id_name].split('_')[-1]) for vals in class_name.objects.values(id_name)])
+    max_list = [int(vals[id_name].split('_')[-1]) for vals in class_name.objects.values(id_name)]
+    return max(max_list) if max_list else 0
 
 def list_checks(request):
     return render(request, 'nb_checks/list_checks.html', {
@@ -34,7 +35,7 @@ def nb_checking(request, check_id):
             record = SubmissionRecord.objects.filter(submission_id=check_id).first()
             if not record:
                 submission_id = 'sub_' + str(get_max_id_function(SubmissionRecord, 'submission_id') + 1)
-                rec = SubmissionRecord.objects.create(
+                record = SubmissionRecord.objects.create(
                     submission_id =  submission_id,
                     associated_teacher = associated_teacher,
                     associated_subject = associated_subject,
@@ -42,11 +43,13 @@ def nb_checking(request, check_id):
                 )
                 for now_updating_student in Student.objects.filter(batch = associated_batch):
                     NotebookSubmission.objects.create(
-                        submission_id = rec,
+                        submission_id = record,
                         student = now_updating_student
                     )
             
             list_records = NotebookSubmission.objects.filter(submission_id = record)
+            print(list_records)
+            print(data)
             for now_updating_record in list_records:
                 if data.get(f"student-{now_updating_record.student.student_id}-c-nb"):
                     now_updating_record.checked_date = data.get(f"student-{now_updating_record.student.student_id}-date") or None

@@ -30,4 +30,4 @@ class Batch(models.Model):
     status = models.CharField(max_length=10,choices=[('Active','Active'),('Inactive','Inactive')],default='None')
 
     def __str__(self):
-        return self.batch_id
+        return f"{self.batch_id} | {self.current_class}"
