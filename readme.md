@@ -17,3 +17,8 @@
     - submission_id : sub_1
 - NotebookSubmission
     - submission_id : SUBMISSIONRECORD
+
+
+# for vercel deployement
+requirements.txt should go in main app (school_portal folder)
+static files require static url, root and dir then a collect static command and an add to urlpatterns as an url (in school_portal/urls.py)
