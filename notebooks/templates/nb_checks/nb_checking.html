@@ -205,9 +205,11 @@
                 <td><button type="button" onclick="remove_nb_date('{{student.student_id}}')" id="remove-nb-date-{{student.student_id}}">remove</button></td>
             </tr>
         {% endfor %}
+        <button type="submit" class="btn btn-primary w-100" id="submit-btn">Submit</button>
+        
         {% for record in records %}
             <tr>
-                <td><a href="{% url 'student_checks_detail' record.student.student_id %}">{{ record.student.roll_number }}</a></td>
+                <td>{{ record.student.roll_number }}</td>
                 <td><a href="{% url 'student_checks_detail' record.student.student_id %}">{{ record.student.name }}</a></td>
 
                 {% if record.checked_date %}

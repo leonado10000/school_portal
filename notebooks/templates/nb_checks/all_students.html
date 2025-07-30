@@ -1,0 +1,101 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<style>
+    h3 {
+        color: #0d6efd;
+        font-weight: 600;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+    }
+
+    .student-table {
+        font-size: 0.85rem;
+        margin-bottom: 30px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .student-table .table {
+        margin-bottom: 0;
+    }
+
+    .student-table .table th,
+    .student-table .table td {
+        text-align: center;
+        vertical-align: middle;
+        padding: 6px 8px;
+        white-space: nowrap;
+    }
+
+    .student-table a {
+        text-decoration: none;
+        color: #0d6efd;
+        font-weight: 500;
+    }
+
+    .student-table a:hover {
+        text-decoration: underline;
+    }
+
+    .scrollable-tbody {
+        display: block;
+        max-height: 260px; /* ~10 rows */
+        overflow-y: auto;
+        width: 100%;
+    }
+
+    .scrollable-tbody tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    thead tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="row">
+        {% for class_label, student_list in student_groups.items %}
+            <div class="col-md-4 col-sm-6 col-12">
+                <div class="student-table p-2">
+                    <h3 class="text-center">{{ class_label }} Class</h3>
+                    <table class="table table-bordered table-hover table-sm">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Roll</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody class="scrollable-tbody">
+                            {% for student in student_list %}
+                                <tr>
+                                    <td>{{ student.roll_number }}</td>
+                                    <td>
+                                        <a href="{% url 'student_checks_detail' student.student_id %}">
+                                            {{ student.name }}
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="2" class="text-muted">No students.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

@@ -81,3 +81,14 @@ def student_checks_detail(request, student_id):
         'records': NotebookSubmission.objects.filter(student=student)
     })
 
+
+def all_students(request):
+    return render(request, 'nb_checks/all_students.html', {
+        'student_groups' : {
+            '6th': Student.objects.filter(batch=Batch.objects.filter(current_class=6).first()),
+            '7th': Student.objects.filter(batch=Batch.objects.filter(current_class=7).first()),
+            '8th': Student.objects.filter(batch=Batch.objects.filter(current_class=8).first()),
+            '9th': Student.objects.filter(batch=Batch.objects.filter(current_class=9).first()),
+            '10th':Student.objects.filter(batch=Batch.objects.filter(current_class=10).first())
+        }
+    })
