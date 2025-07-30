@@ -10,7 +10,7 @@ def get_max_id_function(class_name:models.Model, id_name:str):
 def list_checks(request):
     return render(request, 'nb_checks/list_checks.html', {
         'records' :SubmissionRecord.objects.all(),
-        'batches' :Batch.objects.all(),
+        'batches' :Batch.objects.all().order_by('current_class'),
         'subjects':Subject.objects.all(),
         'teachers':Teacher.objects.all()
     })
