@@ -8,8 +8,8 @@ from core.models import Batch, Subject
 class SubmissionRecord(models.Model):
     submission_id = models.CharField(max_length=50)
     associated_teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, default=1)
-    associated_subject = models.ForeignKey(Subject, on_delete=models.CASCADE, default=1)
-    associated_batch = models.ForeignKey(Batch, on_delete=models.CASCADE, default=1)
+    associated_subject = models.ForeignKey(Subject, on_delete=models.CASCADE, default="sub_1")
+    associated_batch = models.ForeignKey(Batch, on_delete=models.CASCADE, default="batch_1")
     add_date = models.DateField(auto_now_add=True)
 
 class NotebookSubmission(models.Model):

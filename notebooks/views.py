@@ -48,8 +48,6 @@ def nb_checking(request, check_id):
                     )
             
             list_records = NotebookSubmission.objects.filter(submission_id = record)
-            print(list_records)
-            print(data)
             for now_updating_record in list_records:
                 if data.get(f"student-{now_updating_record.student.student_id}-c-nb"):
                     now_updating_record.checked_date = data.get(f"student-{now_updating_record.student.student_id}-date") or None
@@ -63,7 +61,6 @@ def nb_checking(request, check_id):
 
             return HttpResponseRedirect('/list_checks')
     else:
-        # get an existing record
         record = SubmissionRecord.objects.filter(submission_id=check_id).first()   
         if record:
             return render(request, 'nb_checks/nb_checking.html', {
@@ -71,7 +68,7 @@ def nb_checking(request, check_id):
                         'teacher' :record.associated_teacher,
                         'subject' :record.associated_subject,
                         'batch'   :record.associated_batch,
-                        'records' :NotebookSubmission.objects.filter(submission_id = record)
+                        'records' :NotebookSubmission.objects.filter(submission_id=record).order_by('student__roll_number')
                     })
         return list_checks(request)    
 

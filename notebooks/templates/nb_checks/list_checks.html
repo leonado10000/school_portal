@@ -1,68 +1,176 @@
-{% include 'common/header.html' %}
+{% extends 'index.html' %}
+
+{% block content %}
 
 <style>
-    table, tr, td, th {
-        border-collapse: collapse;
-        border : 2px solid black;
-        padding: 5px;
+    @media (max-width: 768px) {
+        body {
+            background-color: #f8f9fa;
+            font-size: 13.5px;
+            color: #212529;
+        }
+
+        table {
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 9px;
+            box-shadow: 0 1.5px 4.5px rgba(0, 0, 0, 0.0375);
+            overflow-x: auto;
+            display: block;
+        }
+
+        table, tr, td, th {
+            border-collapse: collapse;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            font-size: 13.5px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f1f3f5;
+            font-weight: 600;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            font-size: 13.5px;
+        }
+
+        a {
+            color: #0d6efd;
+            text-decoration: none;
+            font-size: 13.5px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .submit-cell {
+            padding-top: 10px;
+            text-align: left;
+        }
+    }
+
+    @media (min-width: 769px) {
+        body {
+            background-color: #f1f3f5;
+            font-size: 10.5px;
+        }
+
+        table {
+            width: 80%;
+            margin: 15px auto;
+            background-color: #ffffff;
+            border-radius: 9px;
+            box-shadow: 0 1.5px 7.5px rgba(0, 0, 0, 0.0375);
+        }
+
+        table, tr, td, th {
+            border-collapse: collapse;
+            border: 1px solid #dee2e6;
+            padding: 7.5px;
+            font-size: 10.5px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f1f3f5;
+            font-weight: 600;
+        }
+
+        select {
+            padding: 6px 10.5px;
+            border-radius: 4.5px;
+            border: 1px solid #ced4da;
+            font-size: 10.5px;
+        }
+
+        a {
+            color: #0d6efd;
+            text-decoration: none;
+            font-size: 10.5px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .submit-cell {
+            padding-top: 10px;
+            text-align: left;
+        }
     }
 </style>
 
 <div>
-    Add new checking
     <form action="{% url 'nb_checking' 'new' %}" method="post">
         {% csrf_token %}
         <input type="hidden" name="new-check" value="add-new-check-record">
         <table>
             <thead>
-                <th>Teacher</th>
-                <th>Subject</th>
-                <th>Class</th>
+                <tr>
+                    <th>Teacher</th>
+                    <th>Subject</th>
+                    <th>Class</th>
+                </tr>
             </thead>
-        <tr>
-            <td>
-                <select name="associated_teacher" id="">
-                    {% for teacher in teachers %}
-                        <option value="{{ teacher.teacher_id }}">{{ teacher }}</option>
-                    {% endfor %}
-                </select>
-            </td>
-            <td>
-                <select name="associated_subject" id="">
-                {% for subject in subjects %}
-                    <option value="{{ subject.code }}">{{ subject }}</option>
-                {% endfor %}
-                </select>    
-            </td>
-            <td>
-                <select name="associated_batch" id="">
-                    {% for batch in batches %}
-                        <option value="{{ batch.batch_id }}">{{ batch.current_class }}</option>
-                    {% endfor %}
-                </select>
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    <select name="associated_teacher" id="">
+                        {% for teacher in teachers %}
+                            <option value="{{ teacher.teacher_id }}">{{ teacher }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <select name="associated_subject" id="">
+                        {% for subject in subjects %}
+                            <option value="{{ subject.code }}">{{ subject }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <select name="associated_batch" id="">
+                        {% for batch in batches %}
+                            <option value="{{ batch.batch_id }}">{{ batch.current_class }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" class="submit-cell">
+                    <button type="submit" class="btn btn-success">Add a New Check</button>
+                </td>
+            </tr>
         </table>
-        
-        <input type="submit" value="Add a New Check">
     </form>
 </div>
 
 <table>
     <thead>
-        <th>Id</th>
-        <th>Teacher</th>
-        <th>Subject</th>
-        <th>Date</th>
+        <tr>
+            <th></th>
+            <th>Date</th>
+            <th>class</th>
+            <th>Subject</th>
+            <th>Teacher</th>
+        </tr>
     </thead>
-{% for record in records %}
-    <tr>
-        <td><a href="{% url 'nb_checking' record.submission_id %}">{{ record.submission_id }}</a></td>
-        <td>{{ record.associated_teacher }}</td>
-        <td>{{ record.associated_subject }}</td>
-        <td>{{ record.add_date }}</td>
-    </tr>
-{% endfor %}
+    {% for record in records %}
+        <tr>
+            <td><a href="{% url 'nb_checking' record.submission_id %}" class="btn btn-primary btn-sm">Check : {{ record.submission_id }}</a></td>
+            <td>{{ record.add_date }}</td>
+            <td>{{ record.associated_batch.current_class }}</td>
+            <td>{{ record.associated_subject.name }}</td>
+            <td>{{ record.associated_teacher.name }}</td>
+        </tr>
+    {% endfor %}
 </table>
 
-{% include 'common/footer.html' %}
+{% endblock %}

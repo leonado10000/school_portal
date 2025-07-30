@@ -9,7 +9,7 @@
     @media (max-width: 768px) {
         body {
             background-color: #f8f9fa;
-            font-size: 10.5px;
+            font-size: 14px;
             color: #212529;
         }
 
@@ -27,30 +27,30 @@
         #submission-details th, #student-checks th {
             background-color: #f1f3f5;
             font-weight: 600;
-            padding: 7.5px;
+            padding: 10px;
             text-align: center;
-            font-size: 10.5px;
+            font-size: 13.5px;
         }
 
         #submission-details td, #student-checks td {
-            padding: 7.5px;
+            padding: 10px;
             vertical-align: middle;
             border-bottom: 0.75px solid #dee2e6;
-            font-size: 10.5px;
+            font-size: 13.5px;
         }
 
         #student-checks input[type="date"] {
             width: 100%;
-            padding: 4.5px 7.5px;
+            padding: 6px 10px;
             border: 0.75px solid #ced4da;
             border-radius: 6px;
             background-color: #fefefe;
             color: #212529;
-            font-size: 10.5px;
+            font-size: 13.5px;
         }
 
         #student-checks input[type="checkbox"] {
-            transform: scale(0.975);
+            transform: scale(1.05);
             margin: 3.75px;
             accent-color: #0d6efd;
         }
@@ -59,19 +59,19 @@
         button[type="submit"] {
             border-radius: 6px;
             border: none;
-            padding: 6px 9px;
+            padding: 8px 12px;
             background-color: #0d6efd;
             color: white;
             font-weight: 500;
             width: 100%;
-            margin-top: 3.75px;
-            font-size: 10.5px;
+            margin-top: 5px;
+            font-size: 13.5px;
         }
 
         a {
             color: #0d6efd;
             text-decoration: none;
-            font-size: 10.5px;
+            font-size: 13.5px;
         }
 
         a:hover {
@@ -80,7 +80,7 @@
 
         #submit-btn {
             max-width: 150px;
-            margin: 3.75px;
+            margin: 5px;
         }
     }
 
@@ -145,15 +145,14 @@
     }
 </style>
 
-
-{{ submission_record }}
-
 {% if submission_record %}
     <form action="{% url 'nb_checking' submission_record.submission_id %}" method="post">    
 {% else %}    
     <form action="{% url 'nb_checking' 'new' %}" method="post">
 {% endif %}
-{% csrf_token %}
+        
+        {% csrf_token %}
+
 <table id="submission-details">
     <thead>
         <th>Submission ID</th>
@@ -195,9 +194,7 @@
         <th>Date</th>
     </thead>
 
-   
         <input type="hidden" name="submit-check" value="submit-check-record">
-        <!-- Only works when adding new record -->
         {% for student in students %}
             <tr>
                 <td><a href="{% url 'student_checks_detail' student.student_id %}">{{ student.roll_number }}</a></td>
@@ -208,7 +205,6 @@
                 <td><button type="button" onclick="remove_nb_date('{{student.student_id}}')" id="remove-nb-date-{{student.student_id}}">remove</button></td>
             </tr>
         {% endfor %}
-        <!-- Only works when updating records -->
         {% for record in records %}
             <tr>
                 <td><a href="{% url 'student_checks_detail' record.student.student_id %}">{{ record.student.roll_number }}</a></td>
