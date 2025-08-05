@@ -93,6 +93,7 @@ def all_students(request):
     students_list = Student.objects.select_related('batch').all().order_by('batch__current_class', 'roll_number')
     context = {
         'student_groups' : {
+            '5th': [s for s in students_list if s.batch.current_class == 5],
             '6th': [s for s in students_list if s.batch.current_class == 6],
             '7th': [s for s in students_list if s.batch.current_class == 7],
             '8th': [s for s in students_list if s.batch.current_class == 8],
