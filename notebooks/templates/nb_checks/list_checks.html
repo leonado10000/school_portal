@@ -129,16 +129,16 @@
                     </select>
                 </td>
                 <td>
-                    <select name="associated_subject" id="">
-                        {% for subject in subjects %}
-                            <option value="{{ subject.code }}">{{ subject }}</option>
+                    <select name="associated_batch" id="" onchange="subjects_change()">
+                        {% for batch in batches %}
+                            <option value="{{ batch.batch_id }}" data-batch_class="{{ batch.current_class }}">{{ batch.current_class }}</option>
                         {% endfor %}
                     </select>
                 </td>
                 <td>
-                    <select name="associated_batch" id="">
-                        {% for batch in batches %}
-                            <option value="{{ batch.batch_id }}">{{ batch.current_class }}</option>
+                    <select name="associated_subject" id="">
+                        {% for subject in subjects %}
+                            <option value="{{ subject.code }}">{{ subject }}</option>
                         {% endfor %}
                     </select>
                 </td>
@@ -172,5 +172,28 @@
         </tr>
     {% endfor %}
 </table>
+
+<script>
+
+    subjects = {{ subjects_json|safe }};
+    function subjects_change() {
+        var select = document.querySelector('select[name="associated_batch"]');
+        var selectedOption = select.options[select.selectedIndex];
+        var batch_class = selectedOption.dataset.batch_class;
+        var subject_select = document.querySelector('select[name="associated_subject"]');
+        subject_select.innerHTML = '';
+
+        subjects.forEach(function(subject) {
+            if (subject.fields.name[0] == batch_class || subject.fields.name.substring(0, 2) == batch_class) {
+                var option = document.createElement('option');
+                option.value = subject.pk;
+                option.textContent = subject.fields.name;
+                subject_select.appendChild(option);
+            }
+        });
+    }
+    subjects_change();
+
+</script>
 
 {% endblock %}

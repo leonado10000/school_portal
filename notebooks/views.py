@@ -1,17 +1,24 @@
 from django.db import models
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
+from django.core import serializers
 from .models import Student, NotebookSubmission, SubmissionRecord, Subject, Teacher, Batch
+import json
+import time
 
 print_arg = "\n sys: "
 def get_max_id_function(class_name:models.Model, id_name:str):
     max_list = [int(vals[id_name].split('_')[-1]) for vals in class_name.objects.values(id_name)]
     return max(max_list) if max_list else 0
 
-def list_checks(request):
+def list_checks(request):        
+    batches = Batch.objects.all().order_by('current_class')
+    subjects = Subject.objects.all()
     return render(request, 'nb_checks/list_checks.html', {
         'records' :SubmissionRecord.objects.all(),
-        'batches' :Batch.objects.all().order_by('current_class'),
+        'batches' :batches,
+        'batches_json':json.loads(serializers.serialize('json', batches)),
         'subjects':Subject.objects.all(),
+        'subjects_json':json.loads(serializers.serialize('json', subjects)),
         'teachers':Teacher.objects.all()
     })
 
@@ -29,7 +36,7 @@ def nb_checking(request, check_id):
                         'teacher' :associated_teacher,
                         'subject' :associated_subject,
                         'batch'   :associated_batch,
-                        'students':Student.objects.filter(batch=associated_batch)
+                        'students':Student.objects.filter(batch=associated_batch).order_by('roll_number')
                     })
         elif data.get('submit-check',0) == 'submit-check-record':
             record = SubmissionRecord.objects.filter(submission_id=check_id).first()
@@ -78,17 +85,19 @@ def student_checks_detail(request, student_id):
     student = Student.objects.filter(student_id=student_id).first()
     return render(request, 'nb_checks/student_checks_detail.html', {
         'student': student,
-        'records': NotebookSubmission.objects.filter(student=student)
+        'records': NotebookSubmission.objects.filter(student=student).order_by('submission_id__add_date'),
     })
 
 
 def all_students(request):
-    return render(request, 'nb_checks/all_students.html', {
+    students_list = Student.objects.select_related('batch').all().order_by('batch__current_class', 'roll_number')
+    context = {
         'student_groups' : {
-            '6th': Student.objects.filter(batch=Batch.objects.filter(current_class=6).first()),
-            '7th': Student.objects.filter(batch=Batch.objects.filter(current_class=7).first()),
-            '8th': Student.objects.filter(batch=Batch.objects.filter(current_class=8).first()),
-            '9th': Student.objects.filter(batch=Batch.objects.filter(current_class=9).first()),
-            '10th':Student.objects.filter(batch=Batch.objects.filter(current_class=10).first())
+            '6th': [s for s in students_list if s.batch.current_class == 6],
+            '7th': [s for s in students_list if s.batch.current_class == 7],
+            '8th': [s for s in students_list if s.batch.current_class == 8],
+            '9th': [s for s in students_list if s.batch.current_class == 9],
+            '10th': [s for s in students_list if s.batch.current_class == 10]
         }
-    })
+    }
+    return render(request, 'nb_checks/all_students.html', context)
