@@ -30,6 +30,8 @@ def nb_checking(request, check_id):
         associated_subject = Subject.objects.filter(      code = data.get('associated_subject')).first()
         associated_batch   = Batch.objects.filter(    batch_id = data.get('associated_batch')  ).first()
 
+        print(data)
+
         if data.get('new-check',0) == 'add-new-check-record':
             return render(request, 'nb_checks/nb_checking.html', {
                         'check_id':check_id,
@@ -102,3 +104,4 @@ def all_students(request):
         }
     }
     return render(request, 'nb_checks/all_students.html', context)
+

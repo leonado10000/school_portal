@@ -157,8 +157,8 @@
     <thead>
         <th>ID</th>
         <th>Teacher</th>
-        <th>Subject</th>
         <th>Class</th>
+        <th>Subject</th>
         <th>Date</th>
     </thead>
     <tr>
@@ -170,13 +170,13 @@
             {{ teacher.name }}
             <input type="hidden" name="associated_teacher" value="{{teacher.teacher_id}}">
         </td>
-        <td>
-            {{ subject.name }}
-            <input type="hidden" name="associated_subject" value="{{subject.code}}">
-        </td>
         <td> 
             {{ batch.current_class }} 
             <input type="hidden" name="associated_batch" value="{{batch.batch_id}}">
+        </td>
+        <td>
+            {{ subject.name }}
+            <input type="hidden" name="associated_subject" value="{{subject.code}}">
         </td>
         <td>
             {{ submission_record.add_date|date:'Y-m-d' }}

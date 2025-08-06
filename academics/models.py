@@ -1,13 +1,14 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
 from core.models import School, Batch
+from people.models import Student, Teacher
 
-class Classroom(models.Model):
-    name = models.CharField(max_length=20)  # 10A, 12C
-    school = models.ForeignKey(School, on_delete=models.CASCADE)
-    batch = models.ForeignKey(Batch, on_delete=models.CASCADE)
+class ResultReport(models.Model):
+    report_id = models.CharField(max_length=20, unique=True)
+    session = models.CharField(max_length=7)
+    report_class = models.IntegerField()
+    teacher_incharge = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='report_teacher', null=True, blank=True)
 
-    def __str__(self):
-        return f"{self.name} - {self.batch}"
+class ReportCard(models.Model):
+    report_id = models.ForeignKey(ResultReport, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    

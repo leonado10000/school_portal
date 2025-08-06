@@ -116,8 +116,8 @@
             <thead>
                 <tr>
                     <th>Teacher</th>
-                    <th>Subject</th>
                     <th>Class</th>
+                    <th>Subject</th>
                 </tr>
             </thead>
             <tr>
@@ -186,7 +186,7 @@
         subjects.forEach(function(subject) {
             if (subject.fields.name[0] == batch_class || subject.fields.name.substring(0, 2) == batch_class) {
                 var option = document.createElement('option');
-                option.value = subject.pk;
+                option.value = subject.fields.code;
                 option.textContent = subject.fields.name;
                 subject_select.appendChild(option);
             }
