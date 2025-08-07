@@ -159,13 +159,13 @@
         <th>Teacher</th>
         <th>Class</th>
         <th>Subject</th>
+        <th>Description</th>
         <th>Date</th>
     </thead>
     <tr>
         <td>
             {{ submission_record.submission_id}}
         </td>
-    
         <td>
             {{ teacher.name }}
             <input type="hidden" name="associated_teacher" value="{{teacher.teacher_id}}">
@@ -181,6 +181,29 @@
         <td>
             {{ submission_record.add_date|date:'Y-m-d' }}
             <input type="hidden" name="check_date" value="{{submission_record.add_date|date:'Y-m-d'}}">
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" name="sub-context" id="sub-context">
+        </td>
+        <td>
+            <button type="button" onclick="add_description('History')">History</button>
+        </td>
+        <td>
+            <button type="button" onclick="add_description('Geography')">Geography</button>
+        </td>
+        <td>
+            <button type="button" onclick="add_description('Civics')">Civics</button>
+        </td>
+        <td>
+            <button type="button" onclick="add_description('Economics')">Economics</button>
+        </td>
+        <td>
+            <button type="button" onclick="add_description('Reader')">Reader</button>
+        </td>
+        <td>
+            <button type="button" onclick="add_description('Vyakran')">Vyakran</button>
         </td>
     </tr>
 </table>
@@ -239,6 +262,10 @@
         <button type="submit" class="btn btn-primary w-100" id="submit-btn">Submit</button>
         
     <script>
+        function add_description(context) {
+            document.getElementById('sub-context').value = context;
+        }
+
         function add_check_date_func(student_id){
             document.getElementById(`student-${student_id}-date`).valueAsDate = new Date();
         }

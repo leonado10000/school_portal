@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'academics',
     'people',
     'notebooks',
+    'marksheet',
 ]
 
 MIDDLEWARE = [
@@ -68,7 +69,10 @@ ROOT_URLCONF = "school_portal.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, 'notebooks/templates')],
+        "DIRS": [
+                os.path.join(BASE_DIR, 'templates'),
+                os.path.join(BASE_DIR, 'notebooks/templates')
+            ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
