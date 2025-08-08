@@ -1,0 +1,40 @@
+{% extends 'common/index.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row g-4">
+        {% for class in classes %}
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header text-white bg-primary">
+                        <h5 class="mb-0">Class {{ class.current_class }}</h5>
+                    </div>
+                    <div class="card-body d-flex flex-column align-items-start gap-2">
+                        <form action="{% url 'marksheet_view' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="class_id" value="{{ class.id }}">
+                            <input type="hidden" name="term" value="1">
+                            <input type="hidden" name="batch" value="{{ class.batch_id }}">
+                            <button class="btn btn-outline-primary w-100">Term 1</button>
+                        </form>
+                        <form action="{% url 'marksheet_view' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="class_id" value="{{ class.id }}">
+                            <input type="hidden" name="term" value="2">
+                            <input type="hidden" name="batch" value="{{ class.batch_id }}">
+                            <button class="btn btn-outline-primary w-100">Term 2</button>
+                        </form>
+                        <form action="{% url 'marksheet_view' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="class_id" value="{{ class.id }}">
+                            <input type="hidden" name="term" value="3">
+                            <input type="hidden" name="batch" value="{{ class.batch_id }}">
+                            <button class="btn btn-outline-primary w-100">Term 3</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

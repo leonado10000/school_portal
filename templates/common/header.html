@@ -30,8 +30,12 @@
 
     <header class="navbar">
         <nav class="nav-links">
-            <a href="{% url 'list_checks' %}">All Checks</a>
+            <a href="{% url 'all_current_terms' %}">Marksheet</a>
+            <a href="{% url 'list_checks' %}">Notebook Checking</a>
             <a href="{% url 'all_students' %}">All Students</a>
-            <a href="{% url 'nb_checking' 'sub_1' %}">New Checking</a>
+            <!-- <a href="{% url 'nb_checking' 'sub_1' %}">New Checking</a> -->
+            
+            <!-- <a href="{% url 'all_current_terms' %}">Terms</a>
+            <a href="{% url 'marksheet_view' %}">Marksheet</a> -->
         </nav>
     </header>
