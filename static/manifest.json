@@ -8,12 +8,7 @@
   "icons": [
     {
       "src": "/static/schoolmate1.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/static/schoolmate1.png",
-      "sizes": "512x512",
+      "sizes": "183x113",
       "type": "image/png"
     }
   ]
