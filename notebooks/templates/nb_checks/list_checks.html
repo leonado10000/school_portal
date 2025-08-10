@@ -3,112 +3,113 @@
 {% block content %}
 
 <style>
-    @media (max-width: 768px) {
-        body {
-            background-color: #f8f9fa;
-            font-size: 13.5px;
-            color: #212529;
-        }
-
-        table {
-            width: 100%;
-            background-color: #ffffff;
-            border-radius: 9px;
-            box-shadow: 0 1.5px 4.5px rgba(0, 0, 0, 0.0375);
-            overflow-x: auto;
-            display: block;
-        }
-
-        table, tr, td, th {
-            border-collapse: collapse;
-            border: 1px solid #dee2e6;
-            padding: 10px;
-            font-size: 13.5px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f1f3f5;
-            font-weight: 600;
-        }
-
-        select {
-            width: 100%;
-            padding: 8px 12px;
-            margin: 5px 0;
-            border-radius: 6px;
-            border: 1px solid #ced4da;
-            font-size: 13.5px;
-        }
-
-        a {
-            color: #0d6efd;
-            text-decoration: none;
-            font-size: 13.5px;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        .submit-cell {
-            padding-top: 10px;
-            text-align: left;
-        }
+    body {
+        background-color: #f9f9fb;
+        font-family: "Segoe UI", sans-serif;
+        color: #333;
     }
 
-    @media (min-width: 769px) {
-        body {
-            background-color: #f1f3f5;
-            font-size: 10.5px;
-        }
+    /* Table container styling */
+    .table-container {
+        background-color: #ffffff;
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 20px auto;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        width: 95%;
+        max-width: 1100px;
+    }
 
-        table {
-            width: 80%;
-            margin: 15px auto;
-            background-color: #ffffff;
-            border-radius: 9px;
-            box-shadow: 0 1.5px 7.5px rgba(0, 0, 0, 0.0375);
-        }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
 
-        table, tr, td, th {
-            border-collapse: collapse;
-            border: 1px solid #dee2e6;
-            padding: 7.5px;
-            font-size: 10.5px;
-            text-align: left;
-        }
+    thead {
+        background: linear-gradient(90deg, #4facfe, #43e97b);
+        color: white;
+    }
 
-        th {
-            background-color: #f1f3f5;
-            font-weight: 600;
-        }
+    th, td {
+        padding: 12px 15px;
+        text-align: center;
+        font-size: 14px;
+    }
 
-        select {
-            padding: 6px 10.5px;
-            border-radius: 4.5px;
-            border: 1px solid #ced4da;
-            font-size: 10.5px;
-        }
+    th {
+        font-weight: 600;
+    }
 
-        a {
-            color: #0d6efd;
-            text-decoration: none;
-            font-size: 10.5px;
-        }
+    td {
+        border-top: 1px solid #eee;
+        background-color: #fff;
+    }
 
-        a:hover {
-            text-decoration: underline;
-        }
+    /* Form elements */
+    select {
+        width: 100%;
+        padding: 8px 12px;
+        border-radius: 6px;
+        background-color: #f1f5f9;
+        border: 1px solid #ddd;
+        font-size: 13px;
+        transition: all 0.2s ease;
+    }
 
-        .submit-cell {
-            padding-top: 10px;
-            text-align: left;
+    select:focus {
+        border-color: #4facfe;
+        background-color: #fff;
+        box-shadow: 0 0 4px rgba(79,172,254,0.4);
+    }
+
+    /* Links */
+    a {
+        color: #2a7ae4;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    /* Buttons */
+    button, .btn {
+        background: linear-gradient(45deg, #4facfe, #43e97b);
+        color: #fff;
+        font-weight: 600;
+        border-radius: 6px;
+        padding: 8px 12px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    button:hover, .btn:hover {
+        filter: brightness(1.1);
+    }
+
+    /* Records button small */
+    .btn-sm {
+        padding: 5px 8px;
+        font-size: 12px;
+        border-radius: 4px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        th, td {
+            font-size: 12px;
+            padding: 8px;
+        }
+        .table-container {
+            margin: 10px;
         }
     }
 </style>
 
-<div>
+<!-- Form Table -->
+<div class="table-container">
     <form action="{% url 'nb_checking' 'new' %}" method="post">
         {% csrf_token %}
         <input type="hidden" name="new-check" value="add-new-check-record">
@@ -120,77 +121,83 @@
                     <th>Subject</th>
                 </tr>
             </thead>
-            <tr>
-                <td>
-                    <select name="associated_teacher" id="">
-                        {% for teacher in teachers %}
-                            <option value="{{ teacher.teacher_id }}">{{ teacher }}</option>
-                        {% endfor %}
-                    </select>
-                </td>
-                <td>
-                    <select name="associated_batch" id="" onchange="subjects_change()">
-                        {% for batch in batches %}
-                            <option value="{{ batch.batch_id }}" data-batch_class="{{ batch.current_class }}">{{ batch.current_class }}</option>
-                        {% endfor %}
-                    </select>
-                </td>
-                <td>
-                    <select name="associated_subject" id="">
-                        {% for subject in subjects %}
-                            <option value="{{ subject.code }}">{{ subject }}</option>
-                        {% endfor %}
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3" class="submit-cell">
-                    <button type="submit" class="btn btn-success">Add a New Check</button>
-                </td>
-            </tr>
+            <tbody>
+                <tr>
+                    <td>
+                        <select name="associated_teacher">
+                            {% for teacher in teachers %}
+                                <option value="{{ teacher.teacher_id }}">{{ teacher }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="associated_batch" onchange="subjects_change()">
+                            {% for batch in batches %}
+                                <option value="{{ batch.batch_id }}" data-batch_class="{{ batch.current_class }}">{{ batch.current_class }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="associated_subject">
+                            {% for subject in subjects %}
+                                <option value="{{ subject.code }}">{{ subject }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="text-align: center;">
+                        <button type="submit">Add a New Check</button>
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </form>
 </div>
 
-<table>
-    <thead>
-        <tr>
-            <th></th>
-            <th>Date</th>
-            <th>class</th>
-            <th>Subject</th>
-            <th>Teacher</th>
-        </tr>
-    </thead>
-    {% for record in records %}
-        <tr>
-            <td><a href="{% url 'nb_checking' record.submission_id %}" class="btn btn-primary btn-sm">Check : {{ record.submission_id }}</a></td>
-            <td>{{ record.add_date }}</td>
-            <td>{{ record.associated_batch.current_class }}</td>
-            <td>
-                {{ record.associated_subject.name }}
-                    {% if record.subject_context %}
-                ({{ record.subject_context }})
-                {% endif %}
-            </td>
-            <td>{{ record.associated_teacher.name }}</td>
-        </tr>
-    {% endfor %}
-</table>
+<!-- Records Table -->
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Date</th>
+                <th>Class</th>
+                <th>Subject</th>
+                <th>Teacher</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+                <tr>
+                    <td><a href="{% url 'nb_checking' record.submission_id %}" class="btn btn-sm">Check : {{ record.submission_id }}</a></td>
+                    <td>{{ record.add_date }}</td>
+                    <td>{{ record.associated_batch.current_class }}</td>
+                    <td>
+                        {{ record.associated_subject.name }}
+                        {% if record.subject_context %}
+                            ({{ record.subject_context }})
+                        {% endif %}
+                    </td>
+                    <td>{{ record.associated_teacher.name }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 <script>
-
-    subjects = {{ subjects_json|safe }};
+    const subjects = {{ subjects_json|safe }};
     function subjects_change() {
-        var select = document.querySelector('select[name="associated_batch"]');
-        var selectedOption = select.options[select.selectedIndex];
-        var batch_class = selectedOption.dataset.batch_class;
-        var subject_select = document.querySelector('select[name="associated_subject"]');
+        const select = document.querySelector('select[name="associated_batch"]');
+        const selectedOption = select.options[select.selectedIndex];
+        const batch_class = selectedOption.dataset.batch_class;
+        const subject_select = document.querySelector('select[name="associated_subject"]');
         subject_select.innerHTML = '';
 
         subjects.forEach(function(subject) {
             if (subject.fields.name[0] == batch_class || subject.fields.name.substring(0, 2) == batch_class) {
-                var option = document.createElement('option');
+                const option = document.createElement('option');
                 option.value = subject.fields.code;
                 option.textContent = subject.fields.name;
                 subject_select.appendChild(option);
@@ -198,7 +205,6 @@
         });
     }
     subjects_change();
-
 </script>
 
 {% endblock %}

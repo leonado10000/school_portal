@@ -7,91 +7,114 @@
 <style>
     body {
         font-family: 'Poppins', sans-serif;
-        background-color: #f5f7fa;
-        padding: 20px;
+        background-color: #f9fafb;
+    }
+
+    .student-card {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        padding: 12px;
+        margin-bottom: 20px;
+    }
+
+    .student-photo {
+        width: 70px;
+        height: 70px;
+        border-radius: 8px;
+        background-color: #e9ecef;
+        object-fit: cover;
+    }
+
+    .student-info {
+        flex: 1;
+    }
+
+    .student-info table {
+        margin-bottom: 0;
+        font-size: 0.9rem;
     }
 
     .card {
         border: none;
-        border-radius: 15px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        margin-bottom: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        margin-bottom: 20px;
         background-color: #ffffff;
     }
 
     .card-header {
-        background-color: #0d6efd;
-        color: white;
-        font-size: 1.25rem;
-        padding: 12px 20px;
-        border-top-left-radius: 15px;
-        border-top-right-radius: 15px;
+        background-color: #f1f3f5;
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 8px 12px;
+        border-bottom: 1px solid #dee2e6;
     }
 
     .table thead th {
-        background-color: #e9ecef;
+        background-color: #f8f9fa;
+        font-size: 0.85rem;
         text-align: center;
     }
 
-    .table thead th.checked-header {
-        background-color: #d1f7d1 !important; /* light green */
+    .checked-header {
+        background-color: #e6f7e6 !important;
         color: #1c6f1c;
     }
 
-    .table thead th.incomplete-header {
-        background-color: #ffd6d6 !important; /* light red */
+    .incomplete-header {
+        background-color: #ffecec !important;
         color: #a10f0f;
     }
 
     .table td {
+        font-size: 0.85rem;
         vertical-align: middle !important;
         text-align: center;
+        padding: 6px;
     }
 
     .checked-cell {
-        background-color: #e8fbe8;
+        background-color: #f0fff0;
         color: #1c6f1c;
-        font-weight: 500;
     }
 
     .incomplete-cell {
-        background-color: #ffecec;
+        background-color: #fff5f5;
         color: #a10f0f;
-        font-weight: 500;
-    }
-
-    a {
-        color: #0d6efd;
-        text-decoration: none;
-    }
-
-    a:hover {
-        text-decoration: underline;
     }
 
     @media (max-width: 768px) {
-        .table-responsive {
-            overflow-x: auto;
+        .student-card {
+            flex-direction: column;
+            align-items: flex-start;
         }
-
-        .card-header {
-            font-size: 1rem;
-            text-align: center;
+        .student-photo {
+            width: 60px;
+            height: 60px;
         }
     }
 </style>
 
 <div class="container">
+
     <!-- Student Info Card -->
-    <div class="card">
-        <div class="card-header">Student Details</div>
-        <div class="card-body table-responsive">
-            <table class="table table-bordered table-sm">
+    <div class="student-card">
+        {% if student.photo_url %}
+            <img src="{{ student.photo_url }}" alt="{{ student.name }}" class="student-photo">
+        {% else %}
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXD-UFYdHGHWMSmt2DOeqv2lSF0v4VqPte2w&s" alt="No Photo" class="student-photo">
+        {% endif %}
+        <div class="student-info">
+            <table class="table table-sm table-borderless">
                 <tbody>
-                    <tr><th>Name</th><td><a href="{% url 'student_checks_detail' student.student_id %}">{{ student.name }}</a></td></tr>
-                    <tr><th>Roll Number</th><td>{{ student.roll_number }}</td></tr>
-                    <tr><th>Class</th><td>{{ student.batch.current_class }}</td></tr>
-                    <tr><th>Phone</th><td>{{ student.phone }}</td></tr>
+                    <tr><th>Name:</th><td><a href="{% url 'student_checks_detail' student.student_id %}">{{ student.name }}</a></td></tr>
+                    <tr><th>Roll:</th><td>{{ student.roll_number }}</td></tr>
+                    <tr><th>Class:</th><td>{{ student.batch.current_class }}</td></tr>
+                    <tr><th>Phone:</th><td>{{ student.phone }}</td></tr>
                 </tbody>
             </table>
         </div>
@@ -108,32 +131,26 @@
                         <th>Subject</th>
                         <th>Teacher</th>
                         <th>Date Assigned</th>
-                        <th class="checked-header">Checked Date</th>
-                        <th class="incomplete-header">Incomplete Date</th>
+                        <th class="checked-header">Checked</th>
+                        <th class="incomplete-header">Incomplete</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for record in records %}
                     <tr>
                         <td>
-                            <a href="{% url 'nb_checking' record.submission_id.submission_id %}" class="btn btn-success btn-sm">
-                                Check: {{ record.submission_id.submission_id }}
+                            <a href="{% url 'nb_checking' record.submission_id.submission_id %}" class="btn btn-outline-success btn-sm">
+                                {{ record.submission_id.submission_id }}
                             </a>
                         </td>
                         <td>{{ record.submission_id.associated_subject }}</td>
                         <td>{{ record.submission_id.associated_teacher }}</td>
                         <td>{{ record.submission_id.add_date }}</td>
                         <td class="checked-cell">
-                            {% if record.checked_date %}
-                                {{ record.checked_date }}
-                            {% else %}
-                            {% endif %}
+                            {% if record.checked_date %}{{ record.checked_date }}{% endif %}
                         </td>
-                        <td class="incomplete-cell">                            
-                            {% if record.incomplete_date %}
-                                {{ record.incomplete_date }}
-                            {% else %}
-                            {% endif %}
+                        <td class="incomplete-cell">
+                            {% if record.incomplete_date %}{{ record.incomplete_date }}{% endif %}
                         </td>
                     </tr>
                 {% empty %}
@@ -143,6 +160,7 @@
             </table>
         </div>
     </div>
+
 </div>
 
 {% endblock %}

@@ -1,3 +1,9 @@
+# to dos
+1. Make a front page with better UI.
+2. set up env and secret hiding.
+
+### Structure
+
 1. Core
 - School
 - Subject

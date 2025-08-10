@@ -1,41 +1,48 @@
 <style>
-
-
-    .navbar {
+    .navbar-custom {
         background-color: #1e1e1e;
-        padding: 1rem 2rem;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
     }
-
-    .nav-links {
-        display: flex;
-        gap: 1.5rem;
+    .navbar-brand {
+        color: #f0f0f0 !important;
+        font-weight: bold;
+        font-size: 1.4rem;
+        letter-spacing: 1px;
     }
-
-    .nav-links a {
-        color: #f0f0f0;
-        text-decoration: none;
-        font-weight: 500;
-        padding: 0.5rem 1rem;
-        border-radius: 6px;
-        transition: background-color 0.3s ease;
+    .navbar-toggler {
+        border: none;
     }
-
-    .nav-links a:hover {
-        background-color: #333;
-        color: #ffffff;
+    .navbar-toggler-icon {
+        filter: invert(1); /* makes the hamburger icon white */
     }
-
 </style>
 
-    <header class="navbar">
-        <nav class="nav-links">
-            <a href="{% url 'all_current_terms' %}">Marksheet</a>
-            <a href="{% url 'list_checks' %}">Notebook Checking</a>
-            <a href="{% url 'all_students' %}">All Students</a>
-            <!-- <a href="{% url 'nb_checking' 'sub_1' %}">New Checking</a> -->
-            
-            <!-- <a href="{% url 'all_current_terms' %}">Terms</a>
-            <a href="{% url 'marksheet_view' %}">Marksheet</a> -->
-        </nav>
-    </header>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container-fluid">
+            <!-- Site Name -->
+            <a class="navbar-brand" href="{% url 'index' %}">School Mate</a>
+
+            <!-- Options Menu -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarOptions" aria-controls="navbarOptions" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Collapsible Menu (for future items) -->
+            <div class="collapse navbar-collapse" id="navbarOptions">
+                <ul class="navbar-nav ms-auto">
+                    <!-- Example Option -->
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{% url 'list_checks' %}">Notebooks</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{% url 'all_current_terms' %}">Marksheet</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="{% url 'all_students' %}">All Students</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

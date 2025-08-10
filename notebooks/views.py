@@ -31,12 +31,13 @@ def nb_checking(request, check_id):
         associated_batch   = Batch.objects.filter(    batch_id = data.get('associated_batch')  ).first()
 
         if data.get('new-check',0) == 'add-new-check-record':
+            temp_records = [{'student':student} for student in Student.objects.filter(batch=associated_batch).order_by('roll_number') ]
             return render(request, 'nb_checks/nb_checking.html', {
                         'check_id':check_id,
                         'teacher' :associated_teacher,
                         'subject' :associated_subject,
                         'batch'   :associated_batch,
-                        'students':Student.objects.filter(batch=associated_batch).order_by('roll_number')
+                        'records' :temp_records
                     })
         elif data.get('submit-check',0) == 'submit-check-record':
             record = SubmissionRecord.objects.filter(submission_id=check_id).first()
@@ -53,7 +54,10 @@ def nb_checking(request, check_id):
                         submission_id = record,
                         student = now_updating_student
                     )
-            
+            if data.get('sub-context',0):
+                record.subject_context = data.get('sub-context')
+                record.save()
+
             list_records = NotebookSubmission.objects.filter(submission_id = record)
             for now_updating_record in list_records:
                 if data.get(f"student-{now_updating_record.student.student_id}-c-nb"):
@@ -66,7 +70,7 @@ def nb_checking(request, check_id):
                     now_updating_record.incomplete_date = None
                 now_updating_record.save()
 
-            return HttpResponseRedirect('/list_checks')
+            return HttpResponseRedirect('list_checks')
     else:
         record = SubmissionRecord.objects.filter(submission_id=check_id).first()   
         if record:

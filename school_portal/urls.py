@@ -22,7 +22,7 @@ from django.shortcuts import render
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', lambda request: render(request, 'common/index.html')),
+    path('', lambda request: render(request, 'common/index.html'), name='index'),
     path('notebook/', include('notebooks.urls')),
     path('marksheet/', include('marksheet.urls')),
 ]
