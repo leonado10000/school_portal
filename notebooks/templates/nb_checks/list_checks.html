@@ -170,7 +170,7 @@
         <tbody>
             {% for record in records %}
                 <tr>
-                    <td><a href="{% url 'nb_checking' record.submission_id %}" class="btn btn-sm">Check : {{ record.submission_id }}</a></td>
+                    <td><a href="{% url 'nb_checking' record.submission_id %}" class="btn btn-sm">{{ record.submission_id }}</a></td>
                     <td>{{ record.add_date }}</td>
                     <td>{{ record.associated_batch.current_class }}</td>
                     <td>

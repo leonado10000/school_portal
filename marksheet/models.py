@@ -5,11 +5,14 @@ class Marksheet(models.Model):
     marksheet_id = models.CharField(max_length=50)
     batch = models.ForeignKey(Batch, on_delete=models.CASCADE)
     forclass = models.IntegerField()
+    term = models.CharField(max_length=10,default="2025-26_1") # term-years _ term_number 
+
+    def __str__(self):
+        return f"class:{self.forclass}; term:{self.term};"
 
 class Scorecard(models.Model):
     marksheet_id = models.ForeignKey(Marksheet, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    term = models.IntegerField()
 
     hindi_theory = models.IntegerField()
     hindi_assessment = models.IntegerField()

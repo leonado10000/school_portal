@@ -196,6 +196,7 @@
         <option value="Civics">Civics</option>
         <option value="Economics">Economics</option>
         <option value="Reader">Reader</option>
+        <option value="Reader (Book)">Reader (Book)</option>
         <option value="Vyakran">Vyakran</option>
     </select>
 </div>
@@ -285,6 +286,8 @@
     <button type="submit" id="submit-btn">Submit</button>
 </div>
 
+<div style="display: none;" id="last_student_id" >{{ last_student_id }}</div>
+
 <script>
     function add_check_date_func(student_id) {
         document.getElementById(`student-${student_id}-date`).valueAsDate = new Date();
@@ -312,13 +315,15 @@
             row.classList.add("neutral-row");
         }
     }
-
-    for (let i = 0; i < 100; i++) {
+    n = document.getElementById("last_student_id").innerHTML
+    n = n.match(/\d+$/);
+    n = parseInt(n[0], 10);
+    for (let i = n-100; i < n+1; i++) {
         console.log(`s_${i}`);
         try {
             updateRowColor(`s_${i}`);
         } catch (error) {
-            console.error(`Error updating row color for s_${i}:`, error);
+            console.log(i)
         }
     }
 </script>
