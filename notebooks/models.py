@@ -13,6 +13,9 @@ class SubmissionRecord(models.Model):
     associated_batch = models.ForeignKey(Batch, on_delete=models.CASCADE, default="batch_1")    
     add_date = models.DateField(auto_now_add=True)
 
+    def __str__(self):
+        return f"Submission {self.submission_id} - {self.add_date}"
+
 class NotebookSubmission(models.Model):
     submission_id = models.ForeignKey(SubmissionRecord, on_delete=models.CASCADE, default="sub_1")
     student = models.ForeignKey(Student, on_delete=models.CASCADE)

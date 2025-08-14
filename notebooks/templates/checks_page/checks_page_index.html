@@ -157,8 +157,7 @@
             <div class="col-6 col-md-6">
                 <a href="{% url 'list_checks' batch.batch_id %}" class="feature-btn d-block text-dark text-decoration-none">
                     <div class="feature-content">
-                        <span>📅</span>
-                        <span class="mt-2 fw-bold">{{ batch }}</span>
+                        <span class="mt-2 fw-bold">Class : {{ batch.current_class }}</span>
                     </div>
                 </a>
             </div>
