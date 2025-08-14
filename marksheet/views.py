@@ -90,7 +90,7 @@ def marksheet_view(request, sheet_id):
 
     scorecards = Scorecard.objects.filter(
             marksheet_id=marksheet_obj
-        )
+        ).order_by('student__roll_number')
     return render(request, 'marksheet/base_sheet.html', {
         'subjects': [
             'Hindi', 'English', 'Maths', 'Science',
