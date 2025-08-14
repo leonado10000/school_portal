@@ -10,16 +10,21 @@ def get_max_id_function(class_name:models.Model, id_name:str):
     max_list = [int(vals[id_name].split('_')[-1]) for vals in class_name.objects.values(id_name)]
     return max(max_list) if max_list else 0
 
-def list_checks(request):        
+def checks_index(request):
     batches = Batch.objects.all().order_by('current_class')
     subjects = Subject.objects.all()
-    return render(request, 'nb_checks/list_checks.html', {
-        'records' :SubmissionRecord.objects.all(),
+    return render(request, 'checks_page/checks_page_index.html', {
+        'records' :SubmissionRecord.objects.all().order_by('-add_date'),
         'batches' :batches,
-        'batches_json':json.loads(serializers.serialize('json', batches)),
-        'subjects':Subject.objects.all(),
-        'subjects_json':json.loads(serializers.serialize('json', subjects)),
+        'subjects':subjects,
         'teachers':Teacher.objects.all()
+    })    
+
+def list_checks(request, batch_id):        
+    batch = Batch.objects.filter(batch_id=batch_id).first()
+    return render(request, 'nb_checks/list_checks.html', {
+        'records' :SubmissionRecord.objects.filter(associated_batch=batch).order_by('-add_date'),
+        'batch' :batch,
     })
 
 def nb_checking(request, check_id):
@@ -71,7 +76,7 @@ def nb_checking(request, check_id):
                     now_updating_record.incomplete_date = None
                 now_updating_record.save()
 
-            return HttpResponseRedirect('list_checks')
+            return HttpResponseRedirect('list_checks'+record.associated_batch.batch_id)
     else:
         record = SubmissionRecord.objects.filter(submission_id=check_id).first()   
         records = NotebookSubmission.objects.filter(submission_id=record).order_by('student__roll_number')
@@ -84,7 +89,7 @@ def nb_checking(request, check_id):
                         'records' :records,
                         'last_student_id':records.last().student.student_id
                     })
-        return list_checks(request)    
+        return list_checks(request, record.associated_batch.batch_id)
 
 
 

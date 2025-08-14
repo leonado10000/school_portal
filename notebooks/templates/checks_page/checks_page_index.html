@@ -1,7 +1,6 @@
 {% extends 'common/index.html' %}
 
 {% block content %}
-
 <style>
     body {
         background-color: #f9f9fb;
@@ -107,54 +106,62 @@
         }
     }
 </style>
-
-<!-- Form Table -->
-<div class="table-container">
+    <div class="table-container">
+    <form action="{% url 'nb_checking' 'new' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="new-check" value="add-new-check-record">
         <table>
             <thead>
                 <tr>
+                    <th>Teacher</th>
                     <th>Class</th>
+                    <th>Subject</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>
-                        {{ batch.current_class }}                        
+                        <select name="associated_teacher">
+                            {% for teacher in teachers %}
+                                <option value="{{ teacher.teacher_id }}">{{ teacher }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="associated_batch" onchange="subjects_change()">
+                            {% for batch in batches %}
+                                <option value="{{ batch.batch_id }}" data-batch_class="{{ batch.current_class }}">{{ batch.current_class }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="associated_subject">
+                            {% for subject in subjects %}
+                                <option value="{{ subject.code }}">{{ subject }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="text-align: center;">
+                        <button type="submit">Add a New Check</button>
                     </td>
                 </tr>
             </tbody>
         </table>
-</div>
-<!-- Records Table -->
-<div class="table-container">
-    <table>
-        <thead>
-            <tr>
-                <th></th>
-                <th>Date</th>
-                <th>Subject</th>
-                <th>Teacher</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for record in records %}
-                <tr>
-                    <td><a href="{% url 'nb_checking' record.submission_id %}" class="btn btn-sm">{{ record.submission_id }}</a></td>
-                    <td>{{ record.add_date }}</td>
-                    <td>
-                        {{ record.associated_subject.name }}
-                        {% if record.subject_context %}
-                            ({{ record.subject_context }})
-                        {% endif %}
-                    </td>
-                    <td>{{ record.associated_teacher.name }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    </form>
 </div>
 
-<script>
-</script>
-
+    {% for batch in batches %}
+        <div class="row">
+            <div class="col-6 col-md-6">
+                <a href="{% url 'list_checks' batch.batch_id %}" class="feature-btn d-block text-dark text-decoration-none">
+                    <div class="feature-content">
+                        <span>📅</span>
+                        <span class="mt-2 fw-bold">{{ batch }}</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}
