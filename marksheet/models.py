@@ -24,11 +24,14 @@ class Scorecard(models.Model):
     science_assessment = models.IntegerField()
     sst_evs_theory = models.IntegerField()
     sst_evs_assessment = models.IntegerField()
-    drawing_theory = models.IntegerField()
-    drawing_assessment = models.IntegerField()
-    computer_music_theory = models.IntegerField()
-    computer_music_assessment = models.IntegerField()
-    gk_theory = models.IntegerField()
-    gk_assessment = models.IntegerField()
+    drawing_theory = models.IntegerField(default=0)
+    drawing_assessment = models.IntegerField(default=0)
+    computer_music_theory = models.IntegerField(default=0)
+    computer_music_assessment = models.IntegerField(default=0)
+    gk_theory = models.IntegerField(default=0)
+    gk_assessment = models.IntegerField(default=0)
     punjabi_skt_theory = models.IntegerField()
     punjabi_skt_assessment = models.IntegerField()
+
+    def __str__(self):
+        return f"Scorecard for {self.student.student_id}.{self.student.name} in {self.marksheet_id.forclass}"

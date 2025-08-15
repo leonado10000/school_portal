@@ -91,7 +91,14 @@ def marksheet_view(request, sheet_id):
     scorecards = Scorecard.objects.filter(
             marksheet_id=marksheet_obj
         ).order_by('student__roll_number')
-    return render(request, 'marksheet/base_sheet.html', {
+    
+    sheet_template = 'marksheet_templates/marksheet_primary.html'
+    if marksheet_obj.forclass > 8:
+        sheet_template = 'marksheet_templates/marksheet_senior_sec.html'
+    elif marksheet_obj.forclass > 5:
+        sheet_template = 'marksheet_templates/marksheet_sec.html'
+
+    return render(request, sheet_template, {
         'subjects': [
             'Hindi', 'English', 'Maths', 'Science',
             'Social Science', 'Punjabi', 'GK'
@@ -104,7 +111,7 @@ def marksheet_view(request, sheet_id):
 
 def student_scorecard(request, student_id):
     student = Student.objects.get(student_id=student_id)
-    return render(request, 'marksheet/student_sheet.html',{
+    return render(request, 'marksheet/student_scorecard.html',{
         'subjects': ['Hindi', 'English', 'Maths', 'Science', 'Social Science', 'Punjabi', 'GK'],
         'scorecards' : [1,2,3],
         'student':student

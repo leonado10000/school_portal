@@ -178,12 +178,10 @@
             <th colspan="3" class="subject-name">Hindi</th>
             <th colspan="3" class="subject-name">English</th>
             <th colspan="3" class="subject-name">Maths</th>
-            <th colspan="3" class="subject-name">Science</th>
             <th colspan="3" class="subject-name">SST/EVS</th>
             <th colspan="3" class="subject-name">Drawing</th>
             <th colspan="3" class="subject-name">Computer/Music</th>
             <th colspan="3" class="subject-name">GK</th>
-            <th colspan="3" class="subject-name">Punjabi/SKT</th>
 
             <th rowspan="2" class="total">Marks Obtained</th>
             <th rowspan="2" class="total">Percentage</th>
@@ -191,49 +189,39 @@
 
         <tr>
             <!-- Hindi -->
-            <th class="theory">THY. <br>(80)</th>
-            <th class="assessment">ASS. <br>(20)</th>
-            <th class="subtotal">TOTAL (100)</th>
+            <th class="theory">THY. <br>(40)</th>
+            <th class="assessment">ASS. <br>(10)</th>
+            <th class="subtotal">TOTAL (50)</th>
 
             <!-- English -->
-            <th class="theory">THY. <br>(80)</th>
-            <th class="assessment">ASS. <br>(20)</th>
-            <th class="subtotal">TOTAL (100)</th>
+            <th class="theory">THY. <br>(40)</th>
+            <th class="assessment">ASS. <br>(10)</th>
+            <th class="subtotal">TOTAL (50)</th>
 
             <!-- Maths -->
-            <th class="theory">THY. <br>(80)</th>
-            <th class="assessment">ASS. <br>(20)</th>
-            <th class="subtotal">TOTAL (100)</th>
-
-            <!-- Science -->
-            <th class="theory">THY. <br>(80)</th>
-            <th class="assessment">ASS. <br>(20)</th>
-            <th class="subtotal">TOTAL (100)</th>
+            <th class="theory">THY. <br>(40)</th>
+            <th class="assessment">ASS. <br>(10)</th>
+            <th class="subtotal">TOTAL (50)</th>
 
             <!-- SST/EVS -->
-            <th class="theory">THY. <br>(80)</th>
-            <th class="assessment">ASS. <br>(20)</th>
-            <th class="subtotal">TOTAL (100)</th>
+            <th class="theory">THY. <br>(40)</th>
+            <th class="assessment">ASS. <br>(10)</th>
+            <th class="subtotal">TOTAL (50)</th>
 
             <!-- Drawing -->
-            <th class="theory">THY. <br>(80)</th>
-            <th class="assessment">ASS. <br>(20)</th>
-            <th class="subtotal">TOTAL (100)</th>
+            <th class="theory">THY. <br>(40)</th>
+            <th class="assessment">ASS. <br>(10)</th>
+            <th class="subtotal">TOTAL (50)</th>
 
             <!-- Computer/Music -->
-            <th class="theory">THY. <br>(80)</th>
-            <th class="assessment">ASS. <br>(20)</th>
-            <th class="subtotal">TOTAL (100)</th>
+            <th class="theory">THY. <br>(40)</th>
+            <th class="assessment">ASS. <br>(10)</th>
+            <th class="subtotal">TOTAL (50)</th>
 
             <!-- GK -->
-            <th class="theory">THY. <br>(80)</th>
-            <th class="assessment">ASS. <br>(20)</th>
-            <th class="subtotal">TOTAL (100)</th>
-
-            <!-- Punjabi/SKT -->
-            <th class="theory">THY. <br>(80)</th>
-            <th class="assessment">ASS. <br>(20)</th>
-            <th class="subtotal">TOTAL (100)</th>
+            <th class="theory">THY. <br>(40)</th>
+            <th class="assessment">ASS. <br>(10)</th>
+            <th class="subtotal">TOTAL (50)</th>
         </tr>
         </thead>
 
@@ -241,7 +229,7 @@
             {% for scorecard in scorecards %}
             <tr data-student-id="{{ scorecard.student.student_id }}">
                 <td class="info sticky-col">{{ scorecard.student.roll_number }}</td>
-                <td class="info sticky-col-2">{{ scorecard.student.name }}</td>
+                <td class="info sticky-col-2"><a href="{% url 'student_scorecard' scorecard.student.student_id %}">{{ scorecard.student.name }}</a></td>
                 <!-- Hindi -->
                 <td class="theory" data-label="Hindi Theory">
                     <input type="number" name="hindi_theory_{{ scorecard.student.student_id }}"
@@ -249,7 +237,7 @@
                         data-student="{{ scorecard.student.student_id }}"
                         data-subject="hindi"
                         value="{{ scorecard.hindi_theory }}"
-                        min="0" max="80">
+                        min="0" max="40">
                 </td>
                 <td class="assessment" data-label="Hindi Assessment">
                     <input type="number" name="hindi_assessment_{{ scorecard.student.student_id }}"
@@ -257,7 +245,7 @@
                         data-student="{{ scorecard.student.student_id }}"
                         data-subject="hindi"
                         value="{{ scorecard.hindi_assessment }}"
-                        min="0" max="20">
+                        min="0" max="10">
                 </td>
                 <td class="subtotal" data-label="Hindi Subtotal">
                     <input type="number" name="hindi_subtotal_{{ scorecard.student.student_id }}"
@@ -274,7 +262,7 @@
                         data-student="{{ scorecard.student.student_id }}"
                         data-subject="english"
                         value="{{ scorecard.english_theory }}"
-                        min="0" max="80">
+                        min="0" max="40">
                 </td>
                 <td class="assessment" data-label="English Assessment">
                     <input type="number" name="english_assessment_{{ scorecard.student.student_id }}"
@@ -282,7 +270,7 @@
                         data-student="{{ scorecard.student.student_id }}"
                         data-subject="english"
                         value="{{ scorecard.english_assessment }}"
-                        min="0" max="20">
+                        min="0" max="10">
                 </td>
                 <td class="subtotal" data-label="English Subtotal">
                     <input type="number" name="english_subtotal_{{ scorecard.student.student_id }}"
@@ -299,7 +287,7 @@
                         data-student="{{ scorecard.student.student_id }}"
                         data-subject="maths"
                         value="{{ scorecard.maths_theory }}"
-                        min="0" max="80">
+                        min="0" max="40">
                 </td>
                 <td class="assessment" data-label="Maths Assessment">
                     <input type="number" name="maths_assessment_{{ scorecard.student.student_id }}"
@@ -307,7 +295,7 @@
                         data-student="{{ scorecard.student.student_id }}"
                         data-subject="maths"
                         value="{{ scorecard.maths_assessment }}"
-                        min="0" max="20">
+                        min="0" max="10">
                 </td>
                 <td class="subtotal" data-label="Maths Subtotal">
                     <input type="number" name="maths_subtotal_{{ scorecard.student.student_id }}"
@@ -317,31 +305,6 @@
                         value="{{ scorecard.maths_theory|add:scorecard.maths_assessment }}">
                 </td>
 
-                <!-- Science -->
-                <td class="theory" data-label="Science Theory">
-                    <input type="number" name="science_theory_{{ scorecard.student.student_id }}"
-                        class="theory-input"
-                        data-student="{{ scorecard.student.student_id }}"
-                        data-subject="science"
-                        value="{{ scorecard.science_theory }}"
-                        min="0" max="80">
-                </td>
-                <td class="assessment" data-label="Science Assessment">
-                    <input type="number" name="science_assessment_{{ scorecard.student.student_id }}"
-                        class="assessment-input"
-                        data-student="{{ scorecard.student.student_id }}"
-                        data-subject="science"
-                        value="{{ scorecard.science_assessment }}"
-                        min="0" max="20">
-                </td>
-                <td class="subtotal" data-label="Science Subtotal">
-                    <input type="number" name="science_subtotal_{{ scorecard.student.student_id }}"
-                        class="subtotal"
-                        data-student="{{ scorecard.student.student_id }}"
-                        data-subject="science"
-                        value="{{ scorecard.science_theory|add:scorecard.science_assessment }}">
-                </td>
-
                 <!-- SST/EVS -->
                 <td class="theory" data-label="SST/EVS Theory">
                     <input type="number" name="sst_evs_theory_{{ scorecard.student.student_id }}"
@@ -349,7 +312,7 @@
                         data-student="{{ scorecard.student.student_id }}"
                         data-subject="sst_evs"
                         value="{{ scorecard.sst_evs_theory }}"
-                        min="0" max="80">
+                        min="0" max="40">
                 </td>
                 <td class="assessment" data-label="SST/EVS Assessment">
                     <input type="number" name="sst_evs_assessment_{{ scorecard.student.student_id }}"
@@ -357,7 +320,7 @@
                         data-student="{{ scorecard.student.student_id }}"
                         data-subject="sst_evs"
                         value="{{ scorecard.sst_evs_assessment }}"
-                        min="0" max="20">
+                        min="0" max="10">
                 </td>
                 <td class="subtotal" data-label="SST/EVS Subtotal">
                     <input type="number" name="sst_evs_subtotal_{{ scorecard.student.student_id }}"
@@ -370,101 +333,76 @@
                 <!-- Drawing -->
                 <td class="theory" data-label="Drawing Theory">
                     <input type="number" name="drawing_theory_{{ scorecard.student.student_id }}"
-                        class="theory-input"
+                        class="theory-input-graded"
                         data-student="{{ scorecard.student.student_id }}"
                         data-subject="drawing"
                         value="{{ scorecard.drawing_theory }}"
-                        min="0" max="80">
+                        min="0" max="40">
                 </td>
                 <td class="assessment" data-label="Drawing Assessment">
                     <input type="number" name="drawing_assessment_{{ scorecard.student.student_id }}"
-                        class="assessment-input"
+                        class="assessment-input-graded"
                         data-student="{{ scorecard.student.student_id }}"
                         data-subject="drawing"
                         value="{{ scorecard.drawing_assessment }}"
-                        min="0" max="20">
+                        min="0" max="10">
                 </td>
                 <td class="subtotal" data-label="Drawing Subtotal">
-                    <input type="number" name="drawing_subtotal_{{ scorecard.student.student_id }}"
-                        class="subtotal"
+                    <input type="text" name="drawing_subtotal_{{ scorecard.student.student_id }}"
+                        class="subtotal-graded"
                         data-student="{{ scorecard.student.student_id }}"
                         data-subject="drawing"
-                        value="{{ scorecard.drawing_theory|add:scorecard.drawing_assessment }}">
+                        style="width: 40px;">
                 </td>
 
                 <!-- Computer/Music -->
                 <td class="theory" data-label="Computer/Music Theory">
                     <input type="number" name="computer_music_theory_{{ scorecard.student.student_id }}"
-                        class="theory-input"
+                        class="theory-input-graded"
                         data-student="{{ scorecard.student.student_id }}"
                         data-subject="computer_music"
                         value="{{ scorecard.computer_music_theory }}"
-                        min="0" max="80">
+                        min="0" max="40">
                 </td>
                 <td class="assessment" data-label="Computer/Music Assessment">
                     <input type="number" name="computer_music_assessment_{{ scorecard.student.student_id }}"
-                        class="assessment-input"
+                        class="assessment-input-graded"
                         data-student="{{ scorecard.student.student_id }}"
                         data-subject="computer_music"
                         value="{{ scorecard.computer_music_assessment }}"
-                        min="0" max="20">
+                        min="0" max="10">
                 </td>
                 <td class="subtotal" data-label="Computer/Music Subtotal">
-                    <input type="number" name="computer_music_subtotal_{{ scorecard.student.student_id }}"
-                        class="subtotal"
+                    <input type="text" name="computer_music_subtotal_{{ scorecard.student.student_id }}"
+                        class="subtotal-graded"
                         data-student="{{ scorecard.student.student_id }}"
                         data-subject="computer_music"
-                        value="{{ scorecard.computer_music_theory|add:scorecard.computer_music_assessment }}">
+                        style="width: 40px;">
                 </td>
 
                 <!-- GK -->
                 <td class="theory" data-label="GK Theory">
                     <input type="number" name="gk_theory_{{ scorecard.student.student_id }}"
-                        class="theory-input"
+                        class="theory-input-graded"
                         data-student="{{ scorecard.student.student_id }}"
                         data-subject="gk"
                         value="{{ scorecard.gk_theory }}"
-                        min="0" max="80">
+                        min="0" max="40">
                 </td>
                 <td class="assessment" data-label="GK Assessment">
                     <input type="number" name="gk_assessment_{{ scorecard.student.student_id }}"
-                        class="assessment-input"
+                        class="assessment-input-graded"
                         data-student="{{ scorecard.student.student_id }}"
                         data-subject="gk"
                         value="{{ scorecard.gk_assessment }}"
-                        min="0" max="20">
+                        min="0" max="10">
                 </td>
                 <td class="subtotal" data-label="GK Subtotal">
-                    <input type="number" name="gk_subtotal_{{ scorecard.student.student_id }}"
-                        class="subtotal"
+                    <input type="text" name="gk_subtotal_{{ scorecard.student.student_id }}"
+                        class="subtotal-graded"
                         data-student="{{ scorecard.student.student_id }}"
                         data-subject="gk"
-                        value="{{ scorecard.gk_theory|add:scorecard.gk_assessment }}">
-                </td>
-
-                <!-- Punjabi/SKT -->
-                <td class="theory" data-label="Punjabi/SKT Theory">
-                    <input type="number" name="punjabi_skt_theory_{{ scorecard.student.student_id }}"
-                        class="theory-input"
-                        data-student="{{ scorecard.student.student_id }}"
-                        data-subject="punjabi_skt"
-                        value="{{ scorecard.punjabi_skt_theory }}"
-                        min="0" max="80">
-                </td>
-                <td class="assessment" data-label="Punjabi/SKT Assessment">
-                    <input type="number" name="punjabi_skt_assessment_{{ scorecard.student.student_id }}"
-                        class="assessment-input"
-                        data-student="{{ scorecard.student.student_id }}"
-                        data-subject="punjabi_skt"
-                        value="{{ scorecard.punjabi_skt_assessment }}"
-                        min="0" max="20">
-                </td>
-                <td class="subtotal" data-label="Punjabi/SKT Subtotal">
-                    <input type="number" name="punjabi_skt_subtotal_{{ scorecard.student.student_id }}"
-                        class="subtotal"
-                        data-student="{{ scorecard.student.student_id }}"
-                        data-subject="punjabi_skt"
-                        value="{{ scorecard.punjabi_skt_theory|add:scorecard.punjabi_skt_assessment }}">    
+                        style="width: 40px;">
                 </td>
 
                 <td class="total" data-label="Marks Obtained">
@@ -502,6 +440,23 @@
             updateTotalAndPercentage(studentId);
         }
 
+        function updateGradeSubtotal(studentId, subject) {
+            const subtotalInput = document.querySelector(`input[name="${subject}_subtotal_${studentId}"]`);
+            const theoryInput = parseInt(document.querySelector(`input[name="${subject}_theory_${studentId}"]`).value);
+            const assessmentInput = parseInt(document.querySelector(`input[name="${subject}_assessment_${studentId}"]`).value);
+            
+            if (theoryInput + assessmentInput < 6.25) {subtotalInput.value = "F"}
+            else if (theoryInput + assessmentInput < 12.5) {subtotalInput.value = "E"}
+            else if (theoryInput + assessmentInput < 18.75) {subtotalInput.value = "D"}
+            else if (theoryInput + assessmentInput < 25) {subtotalInput.value = "C"}
+            else if (theoryInput + assessmentInput < 31.25) {subtotalInput.value = "B"}
+            else if (theoryInput + assessmentInput < 37.5) {subtotalInput.value = "A"}
+            else if (theoryInput + assessmentInput < 43.75) {subtotalInput.value = "A+"}
+            else {subtotalInput.value = "A++"}
+
+            console.log(subtotalInput.value)
+        }
+
         // Run on every input change
         document.addEventListener('input', function (event) {
             if (event.target.classList.contains('theory-input') || event.target.classList.contains('assessment-input')) {
@@ -511,12 +466,27 @@
             }
         });
 
+        document.addEventListener('input', function (event) {
+            if (event.target.classList.contains('theory-input-graded') || event.target.classList.contains('assessment-input-graded')) {
+                const studentId = event.target.dataset.student;
+                const subject = event.target.dataset.subject;
+                updateGradeSubtotal(studentId, subject);
+            }
+        });
+
         // Run once when the DOM is loaded
         document.querySelectorAll('.theory-input, .assessment-input').forEach(input => {
             const studentId = input.dataset.student;
             const subject = input.dataset.subject;
             updateSubjectAndTotals(studentId, subject);
         });
+        document.querySelectorAll('.theory-input-graded, .assessment-input-graded').forEach(input => {
+            const studentId = input.dataset.student;
+            const subject = input.dataset.subject;
+            updateGradeSubtotal(studentId, subject);
+        });
+
+
     });
 
 
@@ -538,6 +508,7 @@
         totalObtainedInput.value = totalObtained;
         percentageInput.value = totalSubjects > 0 ? ((totalObtained / totalPossibleMarks) * 100).toFixed(2) : 0;
     }
+
 </script>
 
 {% endblock %}
