@@ -39,14 +39,13 @@ def nb_checking(request, check_id):
         if data.get('new-check',0) == 'add-new-check-record':
             temp_records = [{'student':student} for student in Student.objects.filter(batch=associated_batch).order_by('roll_number') ]
             return render(request, 'nb_checks/nb_checking.html', {
-                        'check_id':check_id,
                         'teacher' :associated_teacher,
                         'subject' :associated_subject,
                         'batch'   :associated_batch,
                         'records' :temp_records,
                         'last_student_id':temp_records[-1]["student"].student_id
                     })
-        elif data.get('submit-check',0) == 'submit-check-record':
+        elif data.get('submit-check',0) == 'submit-check-record' or check_id == "new":
             record = SubmissionRecord.objects.filter(submission_id=check_id).first()
             if not record:
                 submission_id = 'sub_' + str(get_max_id_function(SubmissionRecord, 'submission_id') + 1)
