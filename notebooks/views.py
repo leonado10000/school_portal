@@ -2,6 +2,7 @@ from django.db import models
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
 from django.core import serializers
 from .models import Student, NotebookSubmission, SubmissionRecord, Subject, Teacher, Batch
+from django.urls import reverse
 import json
 import time
 
@@ -76,9 +77,12 @@ def nb_checking(request, check_id):
                     now_updating_record.incomplete_date = None
                 now_updating_record.save()
 
-            return HttpResponseRedirect(f'/list_checks/{record.associated_batch.batch_id}/')
+            return HttpResponseRedirect(
+                reverse('list_checks', args=[record.associated_batch.batch_id])
+            )
 
     else:
+        print("id", check_id)
         record = SubmissionRecord.objects.filter(submission_id=check_id).first()   
         records = NotebookSubmission.objects.filter(submission_id=record).order_by('student__roll_number')
         if record:
@@ -90,9 +94,9 @@ def nb_checking(request, check_id):
                         'records' :records,
                         'last_student_id':records.last().student.student_id
                     })
-        return list_checks(request, record.associated_batch.batch_id)
-
-
+        return HttpResponseRedirect(
+                reverse('list_checks', args=[record.associated_batch.batch_id])
+            )
 
 from django.utils.dateparse import parse_date
 
