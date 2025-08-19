@@ -76,7 +76,8 @@ def nb_checking(request, check_id):
                     now_updating_record.incomplete_date = None
                 now_updating_record.save()
 
-            return HttpResponseRedirect('list_checks'+record.associated_batch.batch_id)
+            return HttpResponseRedirect(f'/list_checks/{record.associated_batch.batch_id}/')
+
     else:
         record = SubmissionRecord.objects.filter(submission_id=check_id).first()   
         records = NotebookSubmission.objects.filter(submission_id=record).order_by('student__roll_number')
