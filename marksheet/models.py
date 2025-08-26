@@ -34,4 +34,4 @@ class Scorecard(models.Model):
     punjabi_skt_assessment = models.IntegerField()
 
     def __str__(self):
-        return f"Scorecard for {self.student.student_id}.{self.student.name} in {self.marksheet_id.forclass}"
+        return f"Scorecard for {self.marksheet_id.term} term"

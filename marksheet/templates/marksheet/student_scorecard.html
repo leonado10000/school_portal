@@ -1,11 +1,20 @@
 {% extends 'common/index.html' %}
 
 {% block content %}
+<style>
+    .input-marks {
+        width: 40px;
+        border: 0px;
+        background-color: transparent;
+        text-align: center;
+    }
+</style>
+
 <div class="container mt-4">
 
     {% for card in scorecards %}
-    <!-- Term 1 -->
-    <h4 class="mb-3 text-primary">Term {{card}}</h4>
+    <!-- Term -->
+    <h4 class="mb-3 text-primary">Term {{ card.term_number }}</h4>
     <div class="table-responsive mb-5">
         <table class="table table-bordered table-striped text-center align-middle">
             <thead class="table-light">
@@ -13,35 +22,230 @@
                     <th rowspan="2">Subject</th>
                     <th colspan="2">Max Marks</th>
                     <th rowspan="2">Pass Marks</th>
-                    <th colspan="2">Obtained Marks</th>
-                    <th rowspan="2">Total</th>
-                    <th rowspan="2">Percentage</th>
+                    <th colspan="3">Obtained Marks</th>
                 </tr>
                 <tr>
                     <th>Theory</th>
                     <th>Assessment</th>
                     <th>Theory</th>
                     <th>Assessment</th>
+                    <th>Total</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Example row, replace with your data -->
-                {% for subject in subjects %}
                 <tr>
-                    <td>{{subject}}</td>
+                    <td>Hindi</td>
                     <td>80</td>
                     <td>20</td>
                     <td>34</td>
-                    <td>30</td>
-                    <td>20</td>
-                    <td>50</td>
-                    <td>50%</td>
+                    <td> <input id="hindi_theory_{{card.id}}" class="input-marks" type="number" oninput="adjust_term_marks('{{card.id}}')" value="{{card.hindi_theory}}"> </td>
+                    <td> <input id="hindi_assessment_{{card.id}}" class="input-marks" type="number" oninput="adjust_term_marks('{{card.id}}')" value="{{card.hindi_assessment}}"> </td>
+                    <td> <input type="number" class="input-marks" id="total-hindi-{{card.id}}" readonly> </td>
                 </tr>
-                {% endfor %}
+                <tr>
+                    <td>English</td>
+                    <td>80</td>
+                    <td>20</td>
+                    <td>34</td>
+                    <td> <input id="english_theory_{{card.id}}" class="input-marks" type="number" oninput="adjust_term_marks('{{card.id}}')" value="{{card.english_theory}}"> </td>
+                    <td> <input id="english_assessment_{{card.id}}" class="input-marks" type="number" oninput="adjust_term_marks('{{card.id}}')" value="{{card.english_assessment}}"> </td>
+                    <td> <input type="number" class="input-marks" id="total-english-{{card.id}}" readonly> </td>
+                </tr>
+                <tr>
+                    <td>Maths</td>
+                    <td>80</td>
+                    <td>20</td>
+                    <td>34</td>
+                    <td> <input id="maths_theory_{{card.id}}" class="input-marks" type="number" oninput="adjust_term_marks('{{card.id}}')" value="{{card.maths_theory}}"> </td>
+                    <td> <input id="maths_assessment_{{card.id}}" class="input-marks" type="number" oninput="adjust_term_marks('{{card.id}}')" value="{{card.maths_assessment}}"> </td>
+                    <td> <input type="number" class="input-marks" id="total-maths-{{card.id}}" readonly> </td>
+                </tr>
+                <tr>
+                    <td>Science</td>
+                    <td>80</td>
+                    <td>20</td>
+                    <td>34</td>
+                    <td> <input id="science_theory_{{card.id}}" class="input-marks" type="number" oninput="adjust_term_marks('{{card.id}}')" value="{{card.science_theory}}"> </td>
+                    <td> <input id="science_assessment_{{card.id}}" class="input-marks" type="number" oninput="adjust_term_marks('{{card.id}}')" value="{{card.science_assessment}}"> </td>
+                    <td> <input type="number" class="input-marks" id="total-science-{{card.id}}" readonly> </td>
+                </tr>
+                <tr>
+                    <td>SST</td>
+                    <td>80</td>
+                    <td>20</td>
+                    <td>34</td>
+                    <td> <input id="sst_evs_theory_{{card.id}}" class="input-marks" type="number" oninput="adjust_term_marks('{{card.id}}')" value="{{card.sst_evs_theory}}"> </td>
+                    <td> <input id="sst_evs_assessment_{{card.id}}" class="input-marks" type="number" oninput="adjust_term_marks('{{card.id}}')" value="{{card.sst_evs_assessment}}"> </td>
+                    <td> <input type="number" class="input-marks" id="total-sst-{{card.id}}" readonly> </td>
+                </tr>
+                <tr>
+                    <td>Drawing</td>
+                    <td>80</td>
+                    <td>20</td>
+                    <td>34</td>
+                    <td> <input id="drawing_theory_{{card.id}}" class="input-marks" type="number" oninput="adjust_term_marks('{{card.id}}')" value="{{card.drawing_theory}}"> </td>
+                    <td> <input id="drawing_assessment_{{card.id}}" class="input-marks" type="number" oninput="adjust_term_marks('{{card.id}}')" value="{{card.drawing_assessment}}"> </td>
+                    <td> <input type="number" class="input-marks" id="total-drawing-{{card.id}}" readonly> </td>
+                </tr>
+                <tr>
+                    <td>Computer/Music</td>
+                    <td>80</td>
+                    <td>20</td>
+                    <td>34</td>
+                    <td> <input id="computer_theory_{{card.id}}" class="input-marks" type="number" oninput="adjust_term_marks('{{card.id}}')" value="{{card.computer_music_theory}}"> </td>
+                    <td> <input id="computer_assessment_{{card.id}}" class="input-marks" type="number" oninput="adjust_term_marks('{{card.id}}')" value="{{card.computer_music_assessment}}"> </td>
+                    <td> <input type="number" class="input-marks" id="total-computer-{{card.id}}" readonly> </td>
+                </tr>
+                <tr>
+                    <td>GK</td>
+                    <td>80</td>
+                    <td>20</td>
+                    <td>34</td>
+                    <td> <input id="gk_theory_{{card.id}}" class="input-marks" type="number" oninput="adjust_term_marks('{{card.id}}')" value="{{card.gk_theory}}" min="0" max="80"> </td>
+                    <td> <input id="gk_assessment_{{card.id}}" class="input-marks" type="number" oninput="adjust_term_marks('{{card.id}}')" value="{{card.gk_assessment}}" min="0" max="20"> </td>
+                    <td> <input type="number" class="input-marks" id="total-gk-{{card.id}}" readonly> </td>
+                </tr>
             </tbody>
         </table>
     </div>
     {% endfor %}
+
+
+    <h4 class="mb-3 text-primary">Overall Summary</h4>
+    <div class="table-responsive mb-5">
+        <table class="table table-bordered table-striped text-center align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th rowspan="2">Subject</th>
+                    <th colspan="3">Obtained Marks</th>
+                    <th rowspan="2">Total</th>
+                </tr>
+                <tr>
+                    <th>Term 1</th>
+                    <th>Term 2</th>
+                    <th>Term 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Hindi</td>
+                    {% for id in card_ids %}
+                        <td> <input type="number" class="input-marks" id="hindi-term{{id}}" readonly> </td>
+                    {% endfor %}
+                    <td> <input type="number" class="input-marks" id="total-hindi" readonly> </td>
+                </tr>
+                <tr>
+                    <td>English</td>
+                    {% for id in card_ids %}
+                        <td> <input type="number" class="input-marks" id="english-term{{id}}" readonly> </td>
+                    {% endfor %}
+                    <td> <input type="number" class="input-marks" id="total-english" readonly> </td>
+                </tr>
+                <tr>
+                    <td>Maths</td>
+                    {% for id in card_ids %}
+                        <td> <input type="number" class="input-marks" id="maths-term{{id}}" readonly> </td>
+                    {% endfor %}
+                    <td> <input type="number" class="input-marks" id="total-maths" readonly> </td>
+                </tr>
+                <tr>
+                    <td>Science</td>
+                    {% for id in card_ids %}
+                        <td> <input type="number" class="input-marks" id="science-term{{id}}" readonly> </td>
+                    {% endfor %}
+                    <td> <input type="number" class="input-marks" id="total-science" readonly> </td>
+                </tr>
+                <tr>
+                    <td>SST</td>
+                    {% for id in card_ids %}
+                        <td> <input type="number" class="input-marks" id="sst-term{{id}}" readonly> </td>
+                    {% endfor %}
+                    <td> <input type="number" class="input-marks" id="total-sst" readonly> </td>
+                </tr>
+                <tr>
+                    <td>Drawing</td>
+                    {% for id in card_ids %}
+                        <td> <input type="number" class="input-marks" id="drawing-term{{id}}" readonly> </td>
+                    {% endfor %}
+                    <td> <input type="number" class="input-marks" id="total-drawing" readonly> </td>
+                </tr>
+                <tr>
+                    <td>Computer/Music</td>
+                    {% for id in card_ids %}
+                        <td> <input type="number" class="input-marks" id="computer-term{{id}}" readonly> </td>
+                    {% endfor %}
+                    <td> <input type="number" class="input-marks" id="total-computer" readonly> </td>
+                </tr>
+                <tr>
+                    <td>GK</td>
+                    {% for id in card_ids %}
+                        <td> <input type="number" class="input-marks" id="gk-term{{id}}" readonly> </td>
+                    {% endfor %}
+                    <td> <input type="number" class="input-marks" id="total-gk" readonly> </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+{{ card_ids|json_script:'card_ids' }}
+
+<script>
+    let card_ids = JSON.parse(document.getElementById("card_ids").textContent || "[]");
+
+    function toIntFromId(id) {
+        const el = document.getElementById(id);
+        if (!el) return 0;
+        const n = parseInt(el.value);
+        return isNaN(n) ? 0 : n;
+    }
+
+    function adjust_term_marks(term) {
+        const subjects = [
+            {name: 'hindi', theory: 'hindi_theory', assessment: 'hindi_assessment', total: 'total-hindi'},
+            {name: 'english', theory: 'english_theory', assessment: 'english_assessment', total: 'total-english'},
+            {name: 'maths', theory: 'maths_theory', assessment: 'maths_assessment', total: 'total-maths'},
+            {name: 'science', theory: 'science_theory', assessment: 'science_assessment', total: 'total-science'},
+            {name: 'sst', theory: 'sst_evs_theory', assessment: 'sst_evs_assessment', total: 'total-sst'},
+            {name: 'drawing', theory: 'drawing_theory', assessment: 'drawing_assessment', total: 'total-drawing'},
+            {name: 'computer', theory: 'computer_theory', assessment: 'computer_assessment', total: 'total-computer'},
+            {name: 'gk', theory: 'gk_theory', assessment: 'gk_assessment', total: 'total-gk'}
+        ];
+
+        // per-term totals & copy to summary-term fields
+        subjects.forEach(s => {
+            const th = toIntFromId(`${s.theory}_${term}`);
+            const as = toIntFromId(`${s.assessment}_${term}`);
+            const tval = th + as;
+
+            const termTotalEl = document.getElementById(`${s.total}-${term}`);
+            if (termTotalEl) termTotalEl.value = tval;
+
+            const summaryTermEl = document.getElementById(`${s.name}-term${term}`);
+            if (summaryTermEl) summaryTermEl.value = tval;
+        });
+
+        // reset overall totals to 0
+        subjects.forEach(s => {
+            const overallEl = document.getElementById(s.total);
+            if (overallEl) overallEl.value = 0;
+        });
+
+        // accumulate over all terms (use j, not term)
+        card_ids.forEach(j => {
+            subjects.forEach(s => {
+                const overallEl = document.getElementById(s.total);
+                const termEl = document.getElementById(`${s.total}-${j}`);
+                const overallVal = toIntFromId(s.total); // current overall
+                const termVal = termEl ? (isNaN(parseInt(termEl.value)) ? 0 : parseInt(termEl.value)) : 0;
+                if (overallEl) overallEl.value = overallVal + termVal;
+            });
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", ()=> {
+        card_ids.forEach(i => adjust_term_marks(i));
+    });
+</script>
 
 </div>
 {% endblock %}

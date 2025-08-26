@@ -111,8 +111,16 @@ def marksheet_view(request, sheet_id):
 
 def student_scorecard(request, student_id):
     student = Student.objects.get(student_id=student_id)
+    marksheets = Marksheet.objects.filter(batch=student.batch,forclass=student.batch.current_class).order_by('term')
+    scorecards = Scorecard.objects.filter(student=student,marksheet_id__in=marksheets).order_by('marksheet_id__term')
+    i = 1
+    for card in scorecards:
+        card.term_number = i
+        i += 1
+    card_ids = [card.id for card in scorecards]
     return render(request, 'marksheet/student_scorecard.html',{
-        'subjects': ['Hindi', 'English', 'Maths', 'Science', 'Social Science', 'Punjabi', 'GK'],
-        'scorecards' : [1,2,3],
-        'student':student
+        'subjects': ['Hindi', 'English', 'Maths', 'Science', 'SST/ EVS', 'drawing', 'computer', 'gk', 'punjabi'],
+        'student':student,
+        'scorecards':scorecards,
+        'card_ids':card_ids
     })

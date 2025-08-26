@@ -11,25 +11,33 @@ def get_max_id_function(class_name:models.Model, id_name:str):
     max_list = [int(vals[id_name].split('_')[-1]) for vals in class_name.objects.values(id_name)]
     return max(max_list) if max_list else 0
 
+def last_checked_notebook_dates_for_each_class():
+    return SubmissionRecord.objects.values('associated_batch').annotate(add_date=models.Max('add_date'))
+
 def checks_index(request):
     batches = Batch.objects.all().order_by('current_class')
     subjects = Subject.objects.all()
+    recent_checks = last_checked_notebook_dates_for_each_class()
+    for batch in batches:
+        for rc_batch in recent_checks:
+            if batch.pk == rc_batch['associated_batch']:
+                batch.last_update_date = rc_batch['add_date']
     return render(request, 'checks_page/checks_page_index.html', {
-        'records' :SubmissionRecord.objects.all().order_by('-add_date'),
         'batches' :batches,
         'subjects':subjects,
-        'teachers':Teacher.objects.all()
+        'teachers':Teacher.objects.all(),
+        'recent_checks':recent_checks
     })    
 
 def list_checks(request, batch_id):        
     batch = Batch.objects.filter(batch_id=batch_id).first()
     return render(request, 'nb_checks/list_checks.html', {
         'records' :SubmissionRecord.objects.filter(associated_batch=batch).order_by('-add_date'),
-        'batch' :batch,
+        'batch' :batch
     })
 
 def nb_checking(request, check_id):
-    if request.method == "POST":    
+    if request.method == "POST":
         # get an existing or create a record
         data = request.POST
         associated_teacher = Teacher.objects.filter(teacher_id = data.get('associated_teacher')).first()
