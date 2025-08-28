@@ -13,18 +13,19 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 import psycopg2
+from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+load_dotenv()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
-POSTGRES_URL="postgres://neondb_owner:npg_7HdwZLu5orVp@ep-misty-mountain-ady75dv7-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require"
-POSTGRES_URL_NON_POOLING="postgres://neondb_owner:npg_7HdwZLu5orVp@ep-misty-mountain-ady75dv7.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require"
-POSTGRES_USER="neondb_owner"
-POSTGRES_HOST="ep-misty-mountain-ady75dv7-pooler.c-2.us-east-1.aws.neon.tech"
-POSTGRES_PASSWORD="npg_7HdwZLu5orVp"
-POSTGRES_DATABASE="neondb"
-POSTGRES_URL_NO_SSL="postgres://neondb_owner:npg_7HdwZLu5orVp@ep-misty-mountain-ady75dv7-pooler.c-2.us-east-1.aws.neon.tech/neondb"
-POSTGRES_PRISMA_URL="postgres://neondb_owner:npg_7HdwZLu5orVp@ep-misty-mountain-ady75dv7-pooler.c-2.us-east-1.aws.neon.tech/neondb?connect_timeout=15&sslmode=require"
-
+POSTGRES_URL=os.getenv('POSTGRES_URL')
+POSTGRES_URL_NON_POOLING=os.getenv('POSTGRES_URL_NON_POOLING')
+POSTGRES_USER=os.getenv('PGUSER')
+POSTGRES_HOST=os.getenv('POSTGRES_HOST')
+POSTGRES_PASSWORD=os.getenv('PGPASSWORD')
+POSTGRES_DATABASE=os.getenv('PGDATABASE')
+POSTGRES_URL_NO_SSL=os.getenv('POSTGRES_URL_NO_SSL')
+POSTGRES_PRISMA_URL=os.getenv('POSTGRES_PRISMA_URL')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
