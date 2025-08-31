@@ -1,0 +1,42 @@
+{% extends 'common/index.html' %}
+{% block title %}Student — {{ student.name }}{% endblock %}
+
+{% block content %}
+<style>
+  .card-dark { background: #161a22; border-radius: 10px; padding: 14px; color: #e8eef8; }
+  .kv { color: #9aa0a6; font-size: .95rem; }
+  .value { font-weight:600; }
+</style>
+
+<div class="container py-3">
+  <div class="card-dark">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <h4 class="mb-1">{{ student.name }}</h4>
+        <div class="kv">Roll: <span class="value">{{ student.roll_number }}</span></div>
+        <div class="kv">ID: <span class="value">{{ student.student_id }}</span></div>
+      </div>
+      <div class="text-end small-muted">
+        {{ student.batch }}<br>
+        {{ student.school }}
+      </div>
+    </div>
+
+    <hr class="my-3" style="border-color: rgba(255,255,255,0.06)">
+
+    <div>
+      {% if student.fathers_name %}<div class="kv">Father: <span class="value">{{ student.fathers_name }}</span></div>{% endif %}
+      {% if student.mothers_name %}<div class="kv">Mother: <span class="value">{{ student.mothers_name }}</span></div>{% endif %}
+      {% if student.date_of_birth %}<div class="kv">DOB: <span class="value">{{ student.date_of_birth }}</span></div>{% endif %}
+      {% if student.contact_number %}<div class="kv">Contact: <span class="value">{{ student.contact_number }}</span></div>{% endif %}
+      {% if student.address %}<div class="kv">Address: <span class="value">{{ student.address }}</span></div>{% endif %}
+    </div>
+  </div>
+
+  <div class="d-grid gap-2 mt-3">
+      <a class="btn btn-primary" href="{% url 'student_edit' student.pk %}">✏️ Edit</a>
+      <a class="btn btn-danger" href="{% url 'student_delete' student.pk %}">🗑️ Delete</a>
+      <a class="btn btn-outline-light" href="{% url 'student_list' %}">⬅ Back to list</a>
+  </div>
+</div>
+{% endblock %}

@@ -16,7 +16,7 @@
 
     <style>
         body {
-            background-color: #f8f9fa;
+            background-color: #3c3c3c;
         }
 
         .feature-btn {
@@ -91,15 +91,23 @@
                 <a href="{% url 'all_students' %}" class="feature-btn d-block text-dark text-decoration-none">
                     <div class="feature-content">
                         <span>🎓</span>
-                        <span class="mt-2 fw-bold">All Students</span>
+                        <span class="mt-2 fw-bold">All Students notebook checking</span>
                     </div>
                 </a>
             </div>
             <div class="col-6 col-md-6">
-                <a href="#" class="feature-btn d-block text-dark text-decoration-none">
+                <a href="{% url 'class_list' %}" class="feature-btn d-block text-dark text-decoration-none">
                     <div class="feature-content">
                         <span>📝</span>
-                        <span class="mt-2 fw-bold">Coming Soon</span>
+                        <span class="mt-2 fw-bold">Student Management</span>
+                    </div>
+                </a>
+            </div>            
+            <div class="col-6 col-md-6">
+                <a href="{% url 'notebook_report' %}" class="feature-btn d-block text-dark text-decoration-none">
+                    <div class="feature-content">
+                        <span>📊</span>
+                        <span class="mt-2 fw-bold">Reports</span>
                     </div>
                 </a>
             </div>

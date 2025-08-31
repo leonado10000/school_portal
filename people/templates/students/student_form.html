@@ -1,0 +1,99 @@
+{% extends 'common/index.html' %}
+{% block title %}{% if student %}Edit Student{% else %}Add Student{% endif %}{% endblock %}
+
+{% block content %}
+<style>
+  .form-wrap { background:#161a22; padding:14px; border-radius:12px; color:#e8eef8; }
+  label.small-muted { color:#9aa0a6; font-size: .9rem; }
+  .mb-3 .form-control { background: transparent; color: #e8eef8; border: 1px solid rgba(255,255,255,0.06); border-radius:8px; }
+</style>
+
+<div class="container py-3">
+  <h4 class="mb-3 text-light">{% if student %}Edit Student{% else %}Add Student{% endif %}</h4>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" class="form-wrap">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label class="small-muted">Student ID *</label>
+      <input name="student_id" class="form-control form-control-lg"
+             value="{{ form_data.student_id|default:student.student_id|default:'' }}" disabled required readonly>
+    </div>
+
+    <div class="mb-3">
+      <label class="small-muted">Roll Number *</label>
+      <input type="number" name="roll_number" class="form-control"
+             value="{{ form_data.roll_number|default:student.roll_number|default:'' }}" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="small-muted">Name *</label>
+      <input name="name" class="form-control"
+             value="{{ form_data.name|default:student.name|default:'' }}" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="small-muted">Batch *</label>
+      <select name="batch" class="form-select" required>
+        {% for batch in batches %}
+          {% if form_data.batch %}
+            <option value="{{ batch.id }}" {% if form_data.batch == batch.id|stringformat:"s" %}selected{% endif %}>{{ batch }}</option>
+          {% else %}
+            <option value="{{ batch.id }}" {% if student and student.batch.id == batch.id %}selected{% endif %}>{{ batch }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="small-muted">School (ID) *</label>
+      <input type="number" name="school" class="form-control"
+             value="{{ form_data.school|default:student.school.id|default:'' }}" required>
+    </div>
+
+    <hr style="border-color: rgba(255,255,255,0.04)">
+
+    <div class="mb-3">
+      <label class="small-muted">Father's Name</label>
+      <input name="fathers_name" class="form-control"
+             value="{{ form_data.fathers_name|default:student.fathers_name|default:'' }}">
+    </div>
+
+    <div class="mb-3">
+      <label class="small-muted">Mother's Name</label>
+      <input name="mothers_name" class="form-control"
+             value="{{ form_data.mothers_name|default:student.mothers_name|default:'' }}">
+    </div>
+
+    <div class="mb-3">
+      <label class="small-muted">Date of Birth</label>
+      <input type="date" name="date_of_birth" class="form-control"
+             value="{{ form_data.date_of_birth|default:student.date_of_birth|default:'' }}">
+    </div>
+
+    <div class="mb-3">
+      <label class="small-muted">Contact Number</label>
+      <input name="contact_number" class="form-control"
+             value="{{ form_data.contact_number|default:student.contact_number|default:'' }}">
+    </div>
+
+    <div class="mb-3">
+      <label class="small-muted">Address</label>
+      <input name="address" class="form-control"
+             value="{{ form_data.address|default:student.address|default:'' }}">
+    </div>
+
+    <div class="d-grid gap-2">
+      <button class="btn {% if student %}btn-primary{% else %}btn-success{% endif %} btn-lg" type="submit">
+        {% if student %}Update{% else %}Create{% endif %}
+      </button>
+      <a href="{% if student %}{% url 'student_detail' student.pk %}{% else %}{% url 'student_list' %}{% endif %}"
+         class="btn btn-outline-light btn-lg">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'common/index.html' %}
+{% block title %}Delete Student{% endblock %}
+
+{% block content %}
+<style>
+  .confirm-card { background:#161a22; padding:16px; border-radius:10px; color:#e8eef8; }
+</style>
+
+<div class="container py-3">
+  <div class="confirm-card text-center">
+    <h5>Delete student</h5>
+    <p>Are you sure you want to remove <strong>{{ student.name }}</strong> (Roll {{ student.roll_number }})?</p>
+
+    <form method="post" style="display:inline-block; width:100%;">
+      {% csrf_token %}
+      <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-danger">Yes, delete</button>
+        <a href="{% url 'student_detail' student.pk %}" class="btn btn-outline-light">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

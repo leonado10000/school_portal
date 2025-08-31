@@ -25,5 +25,7 @@ urlpatterns = [
     path('', lambda request: render(request, 'common/index.html'), name='index'),
     path('notebook/', include('notebooks.urls')),
     path('marksheet/', include('marksheet.urls')),
+    path('people/', include('people.urls')),
+    path('reports/', include('reports.urls')),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

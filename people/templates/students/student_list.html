@@ -1,0 +1,76 @@
+{% extends 'common/index.html' %}
+
+{% block title %}Students{% endblock %}
+
+{% block content %}
+<style>
+  :root {
+    --bg: #0f1720;
+    --card: #161a22;
+    --muted: #9aa0a6;
+  }
+  .page-wrap { padding: 14px; }
+  .list-card { background: var(--card); border-radius: 10px; padding: 12px; color: #e8eef8; }
+  .small-muted { color: var(--muted); font-size: .9rem; }
+  .action-links a { margin-right: 8px; }
+</style>
+
+<div class="page-wrap">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="mb-0 text-light">👩‍🎓 Students – Class {{ batch.current_class }} ({{ batch.batch_id }})</h4>
+      <a href="{% url 'class_list' %}" class="btn btn-sm btn-outline-light">⬅️ Back</a>
+  </div>
+
+  <!-- MOBILE LIST -->
+  <div class="d-md-none">
+    {% for student in students %}
+      <div class="list-card mb-2">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <a href="{% url 'student_detail' student.pk %}" class="h6 text-decoration-none text-light">{{ student.name }}</a>
+            <div class="small-muted">ID: {{ student.student_id }}</div>
+          </div>
+          <div class="text-end small-muted">
+            Roll {{ student.roll_number }}
+          </div>
+        </div>
+        <div class="mt-2 action-links">
+          <a href="{% url 'student_edit' student.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
+          <a href="{% url 'student_delete' student.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+        </div>
+      </div>
+    {% empty %}
+      <div class="list-card text-center">No students found</div>
+    {% endfor %}
+  </div>
+
+  <!-- DESKTOP / TABLET -->
+  <div class="table-responsive d-none d-md-block">
+    <table class="table table-dark table-striped align-middle">
+      <thead>
+        <tr>
+          <th>Roll No.</th>
+          <th>Name</th>
+          <th>School</th>
+          <th style="width:140px;">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+          <tr>
+            <td>{{ student.roll_number }}</td>
+            <td><a href="{% url 'student_detail' student.pk %}" class="text-decoration-none text-light">{{ student.name }}</a></td>
+            <td>{{ student.school }}</td>
+            <td>
+              <a href="{% url 'student_edit' student.pk %}" class="btn btn-sm btn-primary me-1">Edit</a>
+              <a href="{% url 'student_delete' student.pk %}" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="4" class="text-center">No students found</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

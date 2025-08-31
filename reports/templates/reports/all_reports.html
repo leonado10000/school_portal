@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    Total Notebook Checking : {{total_records}}
+    Class wise
+    {% for class_record in all_records %}
+        total : {{class_record}}
+    {% endfor %}
+
+    
+    {% for student in best_ten %}
+        {{student}}
+    {% endfor %}
+
+    {% for student in worst_ten %}
+        {{student}}
+    {% endfor %}
+    
+{% endblock %}
