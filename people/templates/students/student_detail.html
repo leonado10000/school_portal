@@ -36,7 +36,7 @@
   <div class="d-grid gap-2 mt-3">
       <a class="btn btn-primary" href="{% url 'student_edit' student.pk %}">✏️ Edit</a>
       <a class="btn btn-danger" href="{% url 'student_delete' student.pk %}">🗑️ Delete</a>
-      <a class="btn btn-outline-light" href="{% url 'student_list' %}">⬅ Back to list</a>
+      <a class="btn btn-outline-light" href="{% url 'student_list_by_batch' student.batch.pk %}">⬅ Back to list</a>
   </div>
 </div>
 {% endblock %}

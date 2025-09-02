@@ -60,6 +60,8 @@ def student_edit(request, student_id):
     error = None
 
     if request.method == "POST":
+        student = Student.objects.get(pk=student_id)
+        print(student)
         form_data = request.POST.dict()
         try:
             student.student_id = form_data.get("student_id", student.student_id).strip()
@@ -77,10 +79,14 @@ def student_edit(request, student_id):
         except IntegrityError:
             error = "Could not save — student_id may already exist."
 
-    return render(
-        request,
-        "students/student_form.html",
-        {"batches": batches, "student": student, "form_data": form_data, "error": error},
+    return render(request,"students/student_form.html",{
+            "batches": batches,
+            "student": student,
+            "form_data": form_data,
+            "error": error,
+            "school_id": student.school_id if student else None
+            
+        },
     )
 
 
