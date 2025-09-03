@@ -104,6 +104,7 @@ DATABASES = {
         'PASSWORD' : POSTGRES_PASSWORD
     },
 }
+
 # DATABASES = {
 #     "default": {
 #         "ENGINE": "django.db.backends.sqlite3",
