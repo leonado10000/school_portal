@@ -49,7 +49,7 @@ def marksheet_view(request, sheet_id):
         # it its an updating marksheet
         # existing marksheet object will be used
         marksheet_obj = Marksheet.objects.get(
-                pk=sheet_id
+                marksheet_id=sheet_id
         )
         this_batch = marksheet_obj.batch
         term_value = marksheet_obj.term
