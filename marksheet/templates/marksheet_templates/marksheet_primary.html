@@ -6,15 +6,17 @@
         border-collapse: collapse;
         width: 100%;
         margin: 20px 0;
+        border-radius: 10px;
     }
 
     th, td {
-        border: 2px solid #ced4da;
+        /* border: 2px solid #ced4da; */
         text-align: center;
         padding: 10px;
         font-weight: 500;
         font-size: 14px;
-        color: #495057;
+        /* color: #495057; */
+        border-radius: 5px;
     }
 
     thead th {
@@ -141,31 +143,36 @@
     /* Keep first 3 columns fixed */
     table th.sticky-col,
     table td.sticky-col {
-        -webkit-text-fill-color: #95e8ff;
+        -webkit-text-fill-color: #000000;
         position: sticky;
         left: 0;
         z-index: 2;
-        background: rgb(70, 70, 70); /* match your info cell bg */
+        background: rgb(255, 255, 255); /* match your info cell bg */
     }
     table th.sticky-col-2,
     table td.sticky-col-2 {
-        -webkit-text-fill-color: #ffffff;
+        -webkit-text-fill-color: #000000;
         position: sticky;
         left: 44px; /* adjust based on col width */
         z-index: 2;
-        background: rgb(70, 70, 70);
+        background: rgb(255, 255, 255);
+    }
+    #student_details {
+        padding: 10px;
+        background-color: whitesmoke;
+        border-radius: 10px;
     }
 </style>
 
-<div>
-    Marksheet ID : {{ marksheet.marksheet_id }} <br>
+<div id="student_details">
+    Marksheet ID : {{ marksheet.marksheet_id }} : {{ marksheet.pk }} <br>
     Batch : {{ marksheet.batch }} <br>
     Class : {{ marksheet.forclass }} <br>
     Term : {{ marksheet.term }} <br>
 </div>
 
 <div class="marksheet-container">
-<form action="{% url 'marksheet_view' marksheet.marksheet_id %}" method="post">
+<form action="{% url 'marksheet_view' marksheet.pk %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="batch" value="{{ scorecards.0.student.batch.batch_id }}">
     <table>
@@ -327,7 +334,7 @@
                         class="subtotal"
                         data-student="{{ scorecard.student.student_id }}"
                         data-subject="sst_evs"
-                        value="{{ scorecard.sst_evs_theory|add:scorecard.sst_evs_assessment }}">
+                        value="{{ scorecard.sst_evs_theory|add:scorecard.sst_evs_assessment }}" readonly>
                 </td>
 
                 <!-- Drawing -->
@@ -495,18 +502,16 @@
         const totalObtainedInput = document.querySelector(`input.total-obtained-input[data-student="${studentId}"]`);
         const percentageInput = document.querySelector(`input.percentage-input[data-student="${studentId}"]`);
 
-        console.log("on updates",subtotalInputs,totalObtainedInput, percentageInput);
 
         let totalObtained = 0;
         subtotalInputs.forEach(input => {
             totalObtained += parseInt(input.value) || 0;
         });
 
-        const totalSubjects = subtotalInputs.length;
-        const totalPossibleMarks = totalSubjects * 100;
+        const totalPossibleMarks = subtotalInputs.length * 50;
 
         totalObtainedInput.value = totalObtained;
-        percentageInput.value = totalSubjects > 0 ? ((totalObtained / totalPossibleMarks) * 100).toFixed(2) : 0;
+        percentageInput.value = subtotalInputs.length > 0 ? ((totalObtained / totalPossibleMarks) * 100).toFixed(2) : 0;
     }
 
 </script>

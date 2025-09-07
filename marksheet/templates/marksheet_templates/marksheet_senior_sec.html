@@ -165,7 +165,7 @@
 </div>
 
 <div class="marksheet-container">
-<form action="{% url 'marksheet_view' marksheet.marksheet_id %}" method="post">
+<form action="{% url 'marksheet_view' marksheet.pk %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="batch" value="{{ scorecards.0.student.batch.batch_id }}">
     <table>

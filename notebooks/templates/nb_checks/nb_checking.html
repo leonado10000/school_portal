@@ -135,6 +135,9 @@
         .table-container {
             margin: 10px;
         }
+        .table-container {
+            overflow: scroll;
+        }
     }
 </style>
 
@@ -314,11 +317,9 @@
     n = n.match(/\d+$/);
     n = parseInt(n[0], 10);
     for (let i = n-100; i < n+1; i++) {
-        console.log(`s_${i}`);
         try {
             updateRowColor(`s_${i}`);
         } catch (error) {
-            console.log(i)
         }
     }
 </script>
