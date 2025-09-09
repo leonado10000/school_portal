@@ -146,7 +146,8 @@ def student_scorecard(request, student_id):
     return render(request, sheet_template ,{
         'student':student,
         'scorecards':scorecards,
-        'card_ids':card_ids
+        'card_ids':card_ids,
+        'card':scorecards[0]
     })
 
 def link_callback(uri, rel):
@@ -272,21 +273,22 @@ def scorecard_pdf_download(request, student_id, sem):
 
     card_ids = [card.id for card in scorecards]
     sheet_template = 'scorecard_pdf/primary/'
+    scorecard = []
     if student.batch.current_class > 8:
         sheet_template = 'scorecard_pdf/sen_sec/'
     elif student.batch.current_class > 5:
         sheet_template = 'scorecard_pdf/sec/'
     if sem < 4:
-        scorecards = [card for card in scorecards if sem == card.term_number][0]
-        print(scorecards)
+        scorecard = [card for card in scorecards if sem == card.term_number][0]
         sheet_template += 'sem_card.html'
     else:
+        scorecard = scorecards[0]
         sheet_template += 'full_card.html'
     template = render_to_string(sheet_template, {
         'student': student,
         'scorecards': scorecards,
         'card_ids': card_ids,
-        'card': scorecards,
+        'card': scorecard,
     } | {**final_marks})
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'inline; filename="scorecard_{student.student_id}.pdf"'
