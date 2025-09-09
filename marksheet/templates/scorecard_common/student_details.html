@@ -1,0 +1,18 @@
+<h1>Student Result</h1>
+
+<div>
+    <table class="table table-striped">
+        <tr>
+            <td style="width: 400px;border: 1px solid black;padding: 5px;">Student Name </td>
+            <td style="width: 400px;border: 1px solid black;padding: 5px;">{{ student.name }}</td>
+        </tr>
+        <tr>
+            <td style="width: 400px;border: 1px solid black;padding: 5px;">Class</td>
+            <td style="width: 400px;border: 1px solid black;padding: 5px;">{{ scorecards.0.marksheet_id.forclass }}</td>
+        </tr>
+        <tr>
+            <td style="width: 400px;border: 1px solid black;padding: 5px;">Roll Number </td>
+            <td style="width: 400px;border: 1px solid black;padding: 5px;">{{ student.roll_number }}</td>
+        </tr>
+    </table>
+</div>

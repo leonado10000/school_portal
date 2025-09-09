@@ -1,3 +1,4 @@
+{% include 'scorecard_common/student_details.html' %}
 <a href="{% url 'marksheet_view' card.marksheet_id.pk %}"><h4 class="mb-3">Term {{ card.term_number }}</h4></a>
     <div>
         <table style="border: 1px solid black;">
@@ -21,7 +22,7 @@
                     <td style="padding: 5px;">Hindi</td>
                     <td style="padding: 5px;">40</td>
                     <td style="padding: 5px;">10</td>
-                    <td style="padding: 5px;">18</td>
+                    <td style="padding: 5px;">17</td>
                     <td style="padding: 5px;"> {{card.hindi_theory}} </td>
                     <td style="padding: 5px;"> {{card.hindi_assessment}} </td>
                     <td style="padding: 5px;"> {{card.hindi_total}} </td>
@@ -30,7 +31,7 @@
                     <td style="padding: 5px;">English</td>
                     <td style="padding: 5px;">40</td>
                     <td style="padding: 5px;">10</td>
-                    <td style="padding: 5px;">18</td>
+                    <td style="padding: 5px;">17</td>
                     <td style="padding: 5px;"> {{card.english_theory}} </td>
                     <td style="padding: 5px;"> {{card.english_assessment}} </td>
                     <td style="padding: 5px;"> {{card.english_total}} </td>
@@ -39,7 +40,7 @@
                     <td style="padding: 5px;">Maths</td>
                     <td style="padding: 5px;">40</td>
                     <td style="padding: 5px;">10</td>
-                    <td style="padding: 5px;">18</td>
+                    <td style="padding: 5px;">17</td>
                     <td style="padding: 5px;">{{card.maths_theory}}</td>
                     <td style="padding: 5px;">{{card.maths_assessment}}</td>
                     <td style="padding: 5px;">{{card.maths_total}}</td>
@@ -48,7 +49,7 @@
                     <td>Science</td>
                     <td>40</td>
                     <td>10</td>
-                    <td>18</td>
+                    <td>17</td>
                     <td> <input id="science_theory_{{card.id}}" class="input-marks" type="number"  value="{{card.science_theory}}"> </td>
                     <td> <input id="science_assessment_{{card.id}}" class="input-marks" type="number"  value="{{card.science_assessment}}"> </td>
                     <td> <input type="number" class="input-marks" id="total-science-{{card.id}}" readonly> </td>
@@ -58,7 +59,7 @@
                     <td style="padding: 5px;">SST/EVS</td>
                     <td style="padding: 5px;">40</td>
                     <td style="padding: 5px;">10</td>
-                    <td style="padding: 5px;">18</td>
+                    <td style="padding: 5px;">17</td>
                     <td style="padding: 5px;">{{card.sst_evs_theory}}</td>
                     <td style="padding: 5px;">{{card.sst_evs_assessment}}</td>
                     <td style="padding: 5px;">{{card.sst_evs_total}}</td>
@@ -67,7 +68,7 @@
                     <td style="padding: 5px;">Drawing</td>
                     <td style="padding: 5px;">40</td>
                     <td style="padding: 5px;">10</td>
-                    <td style="padding: 5px;">18</td>
+                    <td style="padding: 5px;">17</td>
                     <td style="padding: 5px;">{{card.drawing_theory}}</td>
                     <td style="padding: 5px;">{{card.drawing_assessment}}</td>
                     <td style="padding: 5px;">{{card.drawing_total}}</td>
@@ -76,7 +77,7 @@
                     <td  style="padding: 5px;">Computer/Music</td>
                     <td  style="padding: 5px;">40</td>
                     <td  style="padding: 5px;">10</td>
-                    <td  style="padding: 5px;">18</td>
+                    <td  style="padding: 5px;">17</td>
                     <td  style="padding: 5px;">{{card.computer_music_theory}}</td>
                     <td style="padding: 5px;">{{card.computer_music_assessment}}</td>
                     <td style="padding: 5px;">{{card.computer_music_total}}</td>
@@ -85,7 +86,7 @@
                     <td style="padding: 5px;">GK</td>
                     <td style="padding: 5px;">40</td>
                     <td style="padding: 5px;">10</td>
-                    <td style="padding: 5px;">18</td>
+                    <td style="padding: 5px;">17</td>
                     <td style="padding: 5px;">{{card.gk_theory}}</td>
                     <td style="padding: 5px;">{{card.gk_assessment}}</td>
                     <td style="padding: 5px;">{{card.gk_total}}</td>

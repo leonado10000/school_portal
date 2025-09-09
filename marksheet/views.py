@@ -178,21 +178,21 @@ def grade_this_score(score, max_score):
     """
     percentage = (score / max_score) * 100
     if percentage >= 91:
-        return 'A++'
+        return 'A++' + f"\t({score})"
     elif percentage >= 81:
-        return 'A+'
+        return 'A+' + f"\t({score})"
     elif percentage >= 71:
-        return 'A'
+        return 'A' + f"\t({score})"
     elif percentage >= 61:
-        return 'B'
+        return 'B' + f"\t({score})"
     elif percentage >= 51:
-        return 'C'
+        return 'C' + f"\t({score})"
     elif percentage >= 41:
-        return 'D'
+        return 'D' + f"\t({score})"
     elif percentage >= 33:
-        return 'E'
+        return 'E' + f"\t({score})"
     else:
-        return 'F'
+        return 'F' + f"\t({score})"
 
 def scorecard_pdf_download(request, student_id, sem):
     """
@@ -262,9 +262,9 @@ def scorecard_pdf_download(request, student_id, sem):
         i+=1
     
     # convert to grades
-    final_marks['drawing_final_total'] = grade_this_score(final_marks['drawing_final_total'], max_marks_per_subject)
-    final_marks['computer_music_final_total'] = grade_this_score(final_marks['computer_music_final_total'], max_marks_per_subject)
-    final_marks['gk_final_total'] = grade_this_score(final_marks['gk_final_total'], max_marks_per_subject)
+    final_marks['drawing_final_total'] = grade_this_score(final_marks['drawing_final_total'], max_marks_per_subject*3)
+    final_marks['computer_music_final_total'] = grade_this_score(final_marks['computer_music_final_total'], max_marks_per_subject*3)
+    final_marks['gk_final_total'] = grade_this_score(final_marks['gk_final_total'], max_marks_per_subject*3)
     for card in scorecards:
         card.drawing_total = grade_this_score(card.drawing_total, max_marks_per_subject)
         card.computer_music_total = grade_this_score(card.computer_music_total, max_marks_per_subject)

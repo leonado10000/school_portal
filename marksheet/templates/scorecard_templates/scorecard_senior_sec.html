@@ -1,6 +1,9 @@
 {% extends 'common/index.html' %}
 
 {% block content %}
+
+{% include 'scorecard_common/student_details.html' %}
+
 <style>
     .input-marks {
         width: 55px;
@@ -11,8 +14,10 @@
 </style>
 
 <div class="container mt-4">
-
-    <a href="{% url 'scorecard_download' student.student_id %}" class="btn btn-success">Download</a>
+    <a href="{% url 'scorecard_download' student.student_id 4 %}" class="btn btn-success simple-margin">Download Full Result</a> <br>
+    <a href="{% url 'scorecard_download' student_id=student.student_id sem=1 %}" class="btn btn-primary simple-margin">Download 1st sem Result</a>
+    <a href="{% url 'scorecard_download' student_id=student.student_id sem=2 %}" class="btn btn-info simple-margin">Download 2nd sem Result</a>
+    <a href="{% url 'scorecard_download' student_id=student.student_id sem=3 %}" class="btn btn-light simple-margin">Download 3rd sem Result</a>
 
     {% for card in scorecards %}
     <!-- Term -->
