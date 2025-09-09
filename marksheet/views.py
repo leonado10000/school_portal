@@ -194,7 +194,7 @@ def grade_this_score(score, max_score):
     else:
         return 'F'
 
-def scorecard_pdf_download(request, student_id):
+def scorecard_pdf_download(request, student_id, sem):
     """
     Nothing
     """
@@ -271,18 +271,25 @@ def scorecard_pdf_download(request, student_id):
         card.gk_total = grade_this_score(card.gk_total, max_marks_per_subject)
 
     card_ids = [card.id for card in scorecards]
-    sheet_template = 'scorecard_pdf/primary.html'
+    sheet_template = 'scorecard_pdf/primary/'
     if student.batch.current_class > 8:
-        sheet_template = 'scorecard_pdf/sen_sec.html'
+        sheet_template = 'scorecard_pdf/sen_sec/'
     elif student.batch.current_class > 5:
-        sheet_template = 'scorecard_pdf/sec.html'
+        sheet_template = 'scorecard_pdf/sec/'
+    if sem < 4:
+        scorecards = [card for card in scorecards if sem == card.term_number][0]
+        print(scorecards)
+        sheet_template += 'sem_card.html'
+    else:
+        sheet_template += 'full_card.html'
     template = render_to_string(sheet_template, {
         'student': student,
         'scorecards': scorecards,
-        'card_ids': card_ids
+        'card_ids': card_ids,
+        'card': scorecards,
     } | {**final_marks})
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="scorecard_{student.student_id}.pdf"'
+    response['Content-Disposition'] = f'inline; filename="scorecard_{student.student_id}.pdf"'
     pisa_status = pisa.CreatePDF(template, dest=response, link_callback=link_callback)
     if pisa_status.err:
         return HttpResponse("Error generating PDF", status=500)

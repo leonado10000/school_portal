@@ -11,9 +11,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import socket
 import os
 import psycopg2
 from dotenv import load_dotenv
+from django.http import HttpRequest
 
 load_dotenv()
 
@@ -92,25 +94,25 @@ WSGI_APPLICATION = "school_portal.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-DATABASES = {
+if socket.gethostname() != 'Leo':
+    DATABASES = {
         'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME' : POSTGRES_DATABASE,
-        'HOST': POSTGRES_HOST,
-        'URL': POSTGRES_URL,
-        'PRISMA_URL': POSTGRES_PRISMA_URL,
-        'USER': POSTGRES_USER,
-        'PASSWORD' : POSTGRES_PASSWORD
-    },
-}
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME' : POSTGRES_DATABASE,
+            'HOST': POSTGRES_HOST,
+            'URL': POSTGRES_URL,
+            'PRISMA_URL': POSTGRES_PRISMA_URL,
+            'USER': POSTGRES_USER,
+            'PASSWORD' : POSTGRES_PASSWORD
+        },
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 
 # Password validation
