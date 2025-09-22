@@ -14,18 +14,49 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from pyexpat.errors import messages
 from django.contrib import admin
 from django.urls import include, path
 from django.conf.urls.static import static
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import render,redirect
+from django.contrib.auth.decorators import user_passes_test
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+
+def login_page(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)  # logs the user in
+            return redirect('index')  # replace with your post-login page
+        else:
+            messages.error(request, "Invalid ID or Password")
+    return render(request, 'pages/login.html')
+
+def logout_page(request):
+    logout(request)  # logs out the user
+    return redirect('login') 
+
+@login_required(login_url='/login')
+def home_page(request):
+    return render(request, 'common/index.html')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', lambda request: render(request, 'common/index.html'), name='index'),
+    path('', home_page, name='index'),
     path('notebook/', include('notebooks.urls')),
     path('marksheet/', include('marksheet.urls')),
     path('people/', include('people.urls')),
     path('reports/', include('reports.urls')),
+    path('term_of_use/', lambda request: render(request, 'common/term_of_use.html'), name='term_of_use'),
+    path('privacy_policy/', lambda request: render(request, 'common/privacy_policy.html'), name='privacy_policy'),
+    path('login/', login_page, name='login'),
+    path('logout/', logout_page, name='logout')
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

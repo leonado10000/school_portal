@@ -155,17 +155,22 @@
         z-index: 2;
         background: rgb(70, 70, 70);
     }
+    #student_details {
+        padding: 10px;
+        background-color: whitesmoke;
+        border-radius: 10px;
+    }
 </style>
 
-<div>
+<div id="student_details">
     Marksheet ID : {{ marksheet.marksheet_id }} <br>
     Batch : {{ marksheet.batch }} <br>
     Class : {{ marksheet.forclass }} <br>
     Term : {{ marksheet.term }} <br>
 </div>
 
-<div class="marksheet-container">
-<form action="{% url 'marksheet_view' marksheet.marksheet_id %}" method="post">
+<form action="{% url 'marksheet_view' marksheet.pk %}" method="post">
+    <div class="marksheet-container">
     {% csrf_token %}
     <input type="hidden" name="batch" value="{{ scorecards.0.student.batch.batch_id }}">
     <table>
@@ -446,10 +451,9 @@
             {% endfor %}
         </tbody>
     </table>
-
+</div>
     <button type="submit" class="submit-btn btn btn-success">Submit Marks</button>
 </form>
-</div>
 
 <script>    
     document.addEventListener('DOMContentLoaded', function () {

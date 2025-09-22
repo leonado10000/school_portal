@@ -1,6 +1,16 @@
 # to dos
-1. Make a front page with better UI.
-2. set up env and secret hiding.
+1. designer/Colorful result download page.
+2. up and down button for shifting select marks.
+3. multiple teachers handling.
+4. video tutorial. with audio
+5. auto send result to parents.
+6. Make a front page with better UI. (DONE)
+7. set up env and secret hiding. (DONE)
+
+priority list
+3
+4
+2
 
 ### Structure
 

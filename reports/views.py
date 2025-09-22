@@ -2,10 +2,11 @@
 from django.shortcuts import render
 from django.db.models import Count, Q, F, FloatField, ExpressionWrapper
 from django.utils.dateparse import parse_date
-
+from django.contrib.auth.decorators import login_required
 from notebooks.models import NotebookSubmission, SubmissionRecord, Batch
 from people.models import Student
 
+@login_required(login_url='/login')
 def notebook_report(request):
     """
     Notebook checking report:

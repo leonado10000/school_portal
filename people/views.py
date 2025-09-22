@@ -1,7 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Student, Batch
 from django.db import IntegrityError
+from django.contrib.auth.decorators import login_required
 
+
+@login_required(login_url='/login')
 def class_list(request):
     """
     Display all batches/classes with links to their students.
@@ -14,12 +17,15 @@ def class_list(request):
 
 
 # View one student
+
+@login_required(login_url='/login')
 def student_detail(request, student_id):
     student = get_object_or_404(Student, pk=student_id)
     return render(request, "students/student_detail.html", {"student": student})
 
 
 # Add new student
+@login_required(login_url='/login')
 def student_create(request):
     batches = Batch.objects.all()
     form_data = {}
@@ -53,6 +59,7 @@ def student_create(request):
 
 
 # Edit existing student
+@login_required(login_url='/login')
 def student_edit(request, student_id):
     student = get_object_or_404(Student, pk=student_id)
     batches = Batch.objects.all()
@@ -91,6 +98,7 @@ def student_edit(request, student_id):
 
 
 # Delete student
+@login_required(login_url='/login')
 def student_delete(request, student_id):
     student = get_object_or_404(Student, pk=student_id)
     if request.method == "POST":
@@ -99,6 +107,7 @@ def student_delete(request, student_id):
     return render(request, "students/student_confirm_delete.html", {"student": student})
 
 
+@login_required(login_url='/login')
 def student_list_by_batch(request, batch_id):
     """
     Display all students belonging to a specific batch.

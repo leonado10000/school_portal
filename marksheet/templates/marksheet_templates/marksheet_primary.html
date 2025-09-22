@@ -171,8 +171,9 @@
     Term : {{ marksheet.term }} <br>
 </div>
 
-<div class="marksheet-container">
 <form action="{% url 'marksheet_view' marksheet.pk %}" method="post">
+
+<div class="marksheet-container">
     {% csrf_token %}
     <input type="hidden" name="batch" value="{{ scorecards.0.student.batch.batch_id }}">
     <table>
@@ -422,11 +423,9 @@
             {% endfor %}
         </tbody>
     </table>
-
-    <button type="submit" class="submit-btn btn btn-success">Submit Marks</button>
-</form>
 </div>
-
+<button type="submit" class="submit-btn btn btn-success">Submit Marks</button>
+</form>
 <script>    
     document.addEventListener('DOMContentLoaded', function () {
         // Function to update subtotal and total for a specific student & subject

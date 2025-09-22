@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login | InvoiceOS</title>
+
+  <!-- Professional font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- GSAP for smooth, elegant motion -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-tQe7TnWkzH7qFZKXaVGk5f0rXyC3JkOexxw9gC7kQb1rI7b5Y9w8oVmR3mW3bq1qv8lV2yTkvYqvQm8p2W0YzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+    <div class="portal"></div>
+
+    <!-- Login card -->
+    <section class="card" aria-labelledby="title">
+      <div class="brand">
+        <span class="logo-dot"></span>
+        <h1 id="title">School Mate</h1>
+        <small>Secure Sign-in</small>
+      </div>
+
+      <form method="POST" class="form" autocomplete="on" novalidate>
+        {% csrf_token %}
+
+        <div class="slot">
+          <label for="username">Teacher ID</label>
+          <div style="position:relative">
+            <input id="username" name="username" type="text" required placeholder="jane@acme.co" inputmode="email" />
+          </div>
+        </div>
+
+        <div class="slot">
+          <label for="password">Password</label>
+          <div style="position:relative">
+            <input id="password" name="password" type="password" required placeholder="••••••••" />
+          </div>
+        </div>
+
+        <div class="submit">
+          <button type="submit" class="primary">
+            Enter System
+        </button>
+        </div>
+
+        <p class="meta">© {{ now|date:"Y" }} School Mate — encrypted & audit-ready</p>
+      </form>
+    </section>
+  </div>
+</body>
+</html>

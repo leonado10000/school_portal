@@ -5,8 +5,10 @@ from .models import Student, NotebookSubmission, SubmissionRecord, Subject, Teac
 from django.urls import reverse
 import json
 import time
+from django.contrib.auth.decorators import login_required
 
 print_arg = "\n sys: "
+
 def get_max_id_function(class_name:models.Model, id_name:str):
     max_list = [int(vals[id_name].split('_')[-1]) for vals in class_name.objects.values(id_name)]
     return max(max_list) if max_list else 0
@@ -29,6 +31,7 @@ def checks_index(request):
         'recent_checks':recent_checks
     })    
 
+@login_required(login_url='/login')
 def list_checks(request, batch_id):        
     batch = Batch.objects.filter(batch_id=batch_id).first()
     return render(request, 'nb_checks/list_checks.html', {
@@ -36,6 +39,7 @@ def list_checks(request, batch_id):
         'batch' :batch
     })
 
+@login_required(login_url='/login')
 def nb_checking(request, check_id):
     if request.method == "POST":
         # get an existing or create a record
@@ -107,6 +111,7 @@ def nb_checking(request, check_id):
 
 from django.utils.dateparse import parse_date
 
+@login_required(login_url='/login')
 def student_checks_detail(request, student_id):
     if request.method == "POST":
         data = request.POST
@@ -142,6 +147,7 @@ def student_checks_detail(request, student_id):
 
 
 
+@login_required(login_url='/login')
 def all_students(request):
     students_list = Student.objects.select_related('batch').all().order_by('batch__current_class', 'roll_number')
     context = {

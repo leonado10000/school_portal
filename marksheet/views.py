@@ -7,7 +7,9 @@ from notebooks.views import get_max_id_function
 from people.models import Student
 from core.models import Batch
 from .models import Marksheet, Scorecard
+from django.contrib.auth.decorators import login_required
 
+@login_required(login_url='/login')
 def all_current_terms(request):
     """
     returns list of all current classes
@@ -17,6 +19,7 @@ def all_current_terms(request):
         'classes' : all_classes
     })
 
+@login_required(login_url='/login')
 def marksheet_view(request, sheet_id):
     """
     view or create marksheet
@@ -43,13 +46,13 @@ def marksheet_view(request, sheet_id):
         )
         if not created_mks:
             # if marksheet already exists, redirect to that marksheet
-            sheet_id = marksheet_obj.marksheet_id
+            sheet_id = marksheet_obj.id
             return marksheet_view(request, sheet_id)
     else:
         # it its an updating marksheet
         # existing marksheet object will be used
         marksheet_obj = Marksheet.objects.get(
-                marksheet_id=sheet_id
+                id=sheet_id
         )
         this_batch = marksheet_obj.batch
         term_value = marksheet_obj.term
@@ -122,6 +125,7 @@ def marksheet_view(request, sheet_id):
 
 
 
+@login_required(login_url='/login')
 def student_scorecard(request, student_id):
     """
     returns students marks scarcards in details
@@ -150,6 +154,7 @@ def student_scorecard(request, student_id):
         'card':scorecards[0]
     })
 
+@login_required(login_url='/login')
 def link_callback(uri, rel):
     """
     Convert HTML URIs from {% static %} or MEDIA_URL to absolute system paths
@@ -195,6 +200,7 @@ def grade_this_score(score, max_score):
     else:
         return 'F' + f"\t({score})"
 
+@login_required(login_url='/login')
 def scorecard_pdf_download(request, student_id, sem):
     """
     Nothing
