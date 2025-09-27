@@ -7,4 +7,3 @@ tzdata==2022.7
 psycopg2-binary~=2.9.3
 python-dotenv
 xhtml2pdf
-requests
