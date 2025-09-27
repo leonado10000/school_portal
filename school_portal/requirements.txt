@@ -5,9 +5,5 @@ six==1.16.0
 sqlparse==0.4.3
 tzdata==2022.7
 psycopg2-binary~=2.9.3
-python-dotenv==1.1.1
-xhtml2pdf==0.2.8
-requests==2.31.0  # or the version you need
-svglib==1.3.0
-rlpycairo==0.4.0
-pycairo==1.20.1  # pin to version with prebuilt wheel
+python-dotenv
+xhtml2pdf
