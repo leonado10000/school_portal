@@ -41,5 +41,6 @@ def addrecord(action_function_name, request):
 def bronzelogger(func):
     def wrapper(*args, **kwargs):
         a,b = addrecord(func.__name__, args[0])
+        print(a,b)
         return func(*args, **kwargs)
     return wrapper
