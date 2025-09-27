@@ -6,6 +6,7 @@ from django.urls import reverse
 import json
 import time
 from django.contrib.auth.decorators import login_required
+from utils.bronzelogger import bronzelogger
 
 print_arg = "\n sys: "
 
@@ -16,6 +17,8 @@ def get_max_id_function(class_name:models.Model, id_name:str):
 def last_checked_notebook_dates_for_each_class():
     return SubmissionRecord.objects.values('associated_batch').annotate(add_date=models.Max('add_date'))
 
+@login_required(login_url='/login')
+@bronzelogger
 def checks_index(request):
     batches = Batch.objects.all().order_by('current_class')
     subjects = Subject.objects.all()
@@ -32,6 +35,7 @@ def checks_index(request):
     })    
 
 @login_required(login_url='/login')
+@bronzelogger
 def list_checks(request, batch_id):        
     batch = Batch.objects.filter(batch_id=batch_id).first()
     return render(request, 'nb_checks/list_checks.html', {
@@ -40,6 +44,7 @@ def list_checks(request, batch_id):
     })
 
 @login_required(login_url='/login')
+@bronzelogger
 def nb_checking(request, check_id):
     if request.method == "POST":
         # get an existing or create a record
@@ -112,6 +117,7 @@ def nb_checking(request, check_id):
 from django.utils.dateparse import parse_date
 
 @login_required(login_url='/login')
+@bronzelogger
 def student_checks_detail(request, student_id):
     if request.method == "POST":
         data = request.POST
@@ -148,6 +154,7 @@ def student_checks_detail(request, student_id):
 
 
 @login_required(login_url='/login')
+@bronzelogger
 def all_students(request):
     students_list = Student.objects.select_related('batch').all().order_by('batch__current_class', 'roll_number')
     context = {

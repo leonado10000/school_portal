@@ -8,8 +8,10 @@ from people.models import Student
 from core.models import Batch
 from .models import Marksheet, Scorecard
 from django.contrib.auth.decorators import login_required
+from utils.bronzelogger import bronzelogger
 
 @login_required(login_url='/login')
+@bronzelogger
 def all_current_terms(request):
     """
     returns list of all current classes
@@ -20,6 +22,7 @@ def all_current_terms(request):
     })
 
 @login_required(login_url='/login')
+@bronzelogger
 def marksheet_view(request, sheet_id):
     """
     view or create marksheet
@@ -126,6 +129,7 @@ def marksheet_view(request, sheet_id):
 
 
 @login_required(login_url='/login')
+@bronzelogger
 def student_scorecard(request, student_id):
     """
     returns students marks scarcards in details
@@ -201,6 +205,7 @@ def grade_this_score(score, max_score):
         return 'F' + f"\t({score})"
 
 @login_required(login_url='/login')
+@bronzelogger
 def scorecard_pdf_download(request, student_id, sem):
     """
     Nothing
