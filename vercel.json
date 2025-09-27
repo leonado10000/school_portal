@@ -1,10 +1,14 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "manage.py",
-      "use": "@vercel/python",
-      "config": { "runtime": "python3.11" }
-    }
-  ]
+    "version": 2,
+    "builds": [{
+        "src": "manage.py",
+        "use": "@vercel/python",
+        "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+    }],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "school_portal/wsgi.py"
+        }
+    ]
 }
