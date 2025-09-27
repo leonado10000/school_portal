@@ -1,13 +1,15 @@
 {
-  "builds": [{
+  "builds": [
+    {
       "src": "school_portal/wsgi.py",
       "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb", "runtime": "python3.11" }
-  }],
+      "config": { "maxLambdaSize": "15mb" }
+    }
+  ],
   "routes": [
-      {
-          "src": "/(.*)",
-          "dest": "school_portal/wsgi.py"
-      }
+    {
+      "src": "/(.*)",
+      "dest": "school_portal/wsgi.py"
+    }
   ]
 }
