@@ -24,6 +24,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from utils.bronzelogger import bronzelogger
 
 def login_page(request):
     if request.method == "POST":
@@ -44,6 +45,7 @@ def logout_page(request):
     return redirect('login') 
 
 @login_required(login_url='/login')
+@bronzelogger
 def home_page(request):
     return render(request, 'common/index.html')
 
