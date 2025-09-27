@@ -1,12 +1,6 @@
 import requests
 
 def addrecord(action_function_name, request):
-    print(request.META)
-    source_dict = {
-        'a':"Schoolmate",
-        'c':"E-commerce",
-        'b':"Portfolio"
-    }
     school_mate_map = {
         'all_current_terms':'Checking terms',
         'marksheet_view':'Viewing marksheet',
