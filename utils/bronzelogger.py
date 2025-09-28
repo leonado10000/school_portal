@@ -1,4 +1,4 @@
-# import requests
+import requests
 
 def addrecord(action_function_name, request):
     school_mate_map = {
@@ -25,15 +25,15 @@ def addrecord(action_function_name, request):
         source = "Others"
     try:
         url = "https://rahul-jangra-leonado10000.vercel.app/cmd/addrecord"
-        # res = requests.post(
-        #     url,
-        #     data={
-        #         'userip': request.META.get('REMOTE_ADDR', ''),
-        #         'actionmessage': school_mate_map.get(action_function_name, ''),
-        #         'source': source,
-        #         'user': request.user.username if request.user.is_authenticated else 'Anonymous',
-        #     }
-        # )
+        res = requests.post(
+            url,
+            data={
+                'userip': request.META.get('REMOTE_ADDR', ''),
+                'actionmessage': school_mate_map.get(action_function_name, ''),
+                'source': source,
+                'user': request.user.username if request.user.is_authenticated else 'Anonymous',
+            }
+        )
         return 200, "success"
     except Exception as e:
         return 500, str(e)
