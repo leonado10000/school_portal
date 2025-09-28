@@ -5,5 +5,5 @@ urlpatterns = [
     path('terms', all_current_terms, name='all_current_terms'),
     path('marksheet_view/<str:sheet_id>', marksheet_view, name='marksheet_view'),
     path('student/<str:student_id>', student_scorecard, name="student_scorecard"),
-    path('download/<str:student_id>/<int:sem>', scorecard_pdf_download, name="scorecard_download"),
+    path('download/<str:student_id>/<int:sem>', scorecard_pdf_download, name="scorecard_download")
 ]

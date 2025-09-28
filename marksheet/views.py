@@ -9,6 +9,11 @@ from core.models import Batch
 from .models import Marksheet, Scorecard
 from django.contrib.auth.decorators import login_required
 from utils.bronzelogger import bronzelogger
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import A4
 
 @login_required(login_url='/login')
 @bronzelogger
@@ -303,7 +308,134 @@ def scorecard_pdf_download(request, student_id, sem):
     } | {**final_marks})
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'inline; filename="scorecard_{student.student_id}.pdf"'
-    pisa_status = pisa.CreatePDF(template, dest=response, link_callback=link_callback)
-    if pisa_status.err:
-        return HttpResponse("Error generating PDF", status=500)
+
+    doc = SimpleDocTemplate(response, pagesize=A4, leftMargin=0.5*inch, rightMargin=0.5*inch, topMargin=0.5*inch, bottomMargin=0.5*inch)
+    elements = []
+    styles = getSampleStyleSheet()
+
+    # Student Result Section
+    elements.append(Paragraph("Student Result", styles['Heading1']))
+    elements.append(Spacer(1, 0.1*inch))
+
+    data_student = [
+        ['Student Name', student.name],
+        ['Class', card.marksheet_id.forclass],
+        ['Roll Number', student.roll_number],
+    ]
+    t_student = Table(data_student, colWidths=[2*inch, 2*inch])
+    t_student.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTSIZE', (0, 0), (-1, -1), 10),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 5),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 5),
+        ('TOPPADDING', (0, 0), (-1, -1), 5),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
+    ]))
+    elements.append(t_student)
+    elements.append(Spacer(1, 0.2*inch))
+
+    # Term Data
+    terms = [
+        {
+            'term': 'Term 1',
+            'data': [
+                ['Subject', 'Max Marks', '', 'Pass Marks', 'Obtained Marks', '', ''],
+                ['', 'Theory', 'Assessment', '', 'Theory', 'Assessment', 'Total'],
+                ['Hindi', '40', '10', '18', '40', '10', '50'],
+                ['English', '40', '10', '18', '40', '10', '50'],
+                ['Maths', '40', '10', '18', '40', '10', '50'],
+                ['SST/EVS', '40', '10', '18', '40', '10', '50'],
+                ['Drawing', '40', '10', '18', '40', '10', 'A++'],
+                ['Computer/Music', '40', '10', '18', '0', '0', 'F'],
+                ['GK', '40', '10', '18', '40', '10', 'A++'],
+                ['Total', '', '', '', '', '', '200']
+            ]
+        },
+        {
+            'term': 'Term 2',
+            'data': [
+                ['Subject', 'Max Marks', '', 'Pass Marks', 'Obtained Marks', '', ''],
+                ['', 'Theory', 'Assessment', '', 'Theory', 'Assessment', 'Total'],
+                ['Hindi', '40', '10', '18', '40', '10', '50'],
+                ['English', '40', '10', '18', '40', '0', '40'],
+                ['Maths', '40', '10', '18', '0', '0', '0'],
+                ['SST/EVS', '40', '10', '18', '0', '0', '0'],
+                ['Drawing', '40', '10', '18', '0', '0', 'F'],
+                ['Computer/Music', '40', '10', '18', '0', '0', 'F'],
+                ['GK', '40', '10', '18', '0', '0', 'F'],
+                ['Total', '', '', '', '', '', '90']
+            ]
+        },
+        {
+            'term': 'Term 3',
+            'data': [
+                ['Subject', 'Max Marks', '', 'Pass Marks', 'Obtained Marks', '', ''],
+                ['', 'Theory', 'Assessment', '', 'Theory', 'Assessment', 'Total'],
+                ['Hindi', '40', '10', '18', '0', '0', '0'],
+                ['English', '40', '10', '18', '0', '0', '0'],
+                ['Maths', '40', '10', '18', '0', '0', '0'],
+                ['SST/EVS', '40', '10', '18', '0', '0', '0'],
+                ['Drawing', '40', '10', '18', '0', '0', 'F'],
+                ['Computer/Music', '40', '10', '18', '0', '0', 'F'],
+                ['GK', '40', '10', '18', '0', '0', 'F'],
+                ['Total', '', '', '', '', '', '0']
+            ]
+        }
+    ]
+
+    # Add terms to elements
+    for term in terms:
+        elements.append(Paragraph(term['term'], styles['Heading2']))
+        t = Table(term['data'], colWidths=[1.5*inch, 0.75*inch, 0.75*inch, 0.75*inch, 0.75*inch, 0.75*inch, 0.75*inch])
+        t.setStyle(TableStyle([
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
+            ('SPAN', (1, 0), (2, 0)),  # Max Marks
+            ('SPAN', (4, 0), (6, 0)),  # Obtained Marks
+            ('SPAN', (0, -1), (5, -1)),  # Total label span
+            ('ALIGN', (0, -1), (5, -1), 'RIGHT'),
+            ('ALIGN', (0, 0), (0, -1), 'LEFT'),
+            ('ALIGN', (1, 0), (-1, -1), 'CENTER'),
+            ('FONTNAME', (0, 0), (-1, 1), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, -1), 8),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 4),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+            ('TOPPADDING', (0, 0), (-1, -1), 2),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+        ]))
+        elements.append(t)
+        elements.append(Spacer(1, 0.2*inch))
+
+    # Overall Summary
+    overall_summary = [
+        ['Subject', 'Obtained Marks', '', '', 'Total', 'Percentage'],
+        ['', 'Term 1', 'Term 2', 'Term 3', '', ''],
+        ['Hindi', '50', '50', '0', '100', '66.67'],
+        ['English', '50', '40', '0', '90', '60.0'],
+        ['Maths', '50', '0', '0', '50', '33.33'],
+        ['Drawing', 'A++', 'F', 'F', 'A++', '33.33'],
+        ['Computer/Music', 'F', 'F', 'F', 'F', '0.0'],
+        ['GK', 'A++', 'F', 'F', 'A++', '33.33']
+    ]
+
+    elements.append(Paragraph("Overall Summary", styles['Heading2']))
+    t_summary = Table(overall_summary, colWidths=[1.5*inch, 0.75*inch, 0.75*inch, 0.75*inch, 0.75*inch, 0.75*inch])
+    t_summary.setStyle(TableStyle([
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
+        ('SPAN', (1, 0), (3, 0)),  # Obtained Marks
+        ('ALIGN', (0, 0), (0, -1), 'LEFT'),
+        ('ALIGN', (1, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 1), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, -1), 8),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    elements.append(t_summary)
+
+    doc.build(elements)
     return response
