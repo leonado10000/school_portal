@@ -10,5 +10,11 @@
             "src": "/(.*)",
             "dest": "school_portal/wsgi.py"
         }
-    ]
+    ],
+    "build": {
+    "env": {
+      "PIP_ONLY_BINARY": ":all:",
+      "PIP_NO_BUILD_ISOLATION": "false"
+    }
+  }
 }
