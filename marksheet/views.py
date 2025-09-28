@@ -1,4 +1,5 @@
 """ views for marksheet app """
+from collections import defaultdict
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
@@ -192,207 +193,150 @@ def grade_this_score(score, max_score):
     """
     percentage = (score / max_score) * 100
     if percentage >= 91:
-        return 'A++' + f"\t({score})"
+        return 'A++' + f"({score})"
     elif percentage >= 81:
-        return 'A+' + f"\t({score})"
+        return 'A+' + f"({score})"
     elif percentage >= 71:
-        return 'A' + f"\t({score})"
+        return 'A' + f"({score})"
     elif percentage >= 61:
-        return 'B' + f"\t({score})"
+        return 'B' + f"({score})"
     elif percentage >= 51:
-        return 'C' + f"\t({score})"
+        return 'C' + f"({score})"
     elif percentage >= 41:
-        return 'D' + f"\t({score})"
+        return 'D' + f"({score})"
     elif percentage >= 33:
-        return 'E' + f"\t({score})"
+        return 'E' + f"({score})"
     else:
-        return 'F' + f"\t({score})"
+        return 'F' + f"({score})"
 
 @login_required(login_url='/login')
 @bronzelogger
 def scorecard_pdf_download(request, student_id, sem):
-    """
-    Nothing
-    """
     student = Student.objects.get(student_id=student_id)
-    max_marks_per_subject = 100
-    if student.batch.current_class < 6:
-        max_marks_per_subject = 50
-    scorecards = Scorecard.objects.filter(
-        student=student).order_by('marksheet_id__term')
-    i = 1
-    final_marks = {
-        'hindi_final_total': 0,
-        'english_final_total': 0,
-        'maths_final_total': 0,
-        'science_final_total': 0,
-        'sst_evs_final_total': 0,
-        'drawing_final_total': 0,
-        'computer_music_final_total': 0,
-        'gk_final_total': 0,
-        'punjabi_skt_final_total': 0,
-        'hindi_final_percentage': 0,
-        'english_final_percentage': 0,
-        'maths_final_percentage': 0,
-        'science_final_percentage': 0,
-        'sst_evs_final_percentage': 0,
-        'drawing_final_percentage': 0,
-        'computer_music_final_percentage': 0,
-        'gk_final_percentage': 0,
-        'punjabi_skt_final_percentage': 0
-    }
-    for card in scorecards:
-        card.hindi_total = card.hindi_theory + card.hindi_assessment
-        card.english_total = card.english_theory + card.english_assessment
-        card.maths_total = card.maths_theory + card.maths_assessment
-        card.science_total = card.science_theory + card.science_assessment
-        card.sst_evs_total = card.sst_evs_theory + card.sst_evs_assessment
-        card.drawing_total = card.drawing_theory + card.drawing_assessment
-        card.computer_music_total = card.computer_music_theory + card.computer_music_assessment
-        card.gk_total = card.gk_theory + card.gk_assessment
-        card.punjabi_skt_total = card.punjabi_skt_theory + card.punjabi_skt_assessment
-        card.term_total = (
-            card.hindi_total + card.english_total + card.maths_total +
-            card.science_total + card.sst_evs_total + card.punjabi_skt_total
-        )
-        card.term_percentage = round((card.term_total / 500) * 100, 2)
-        final_marks['hindi_final_total'] += card.hindi_total
-        final_marks['hindi_final_percentage'] = round((final_marks['hindi_final_total'] / (i * max_marks_per_subject)) * 100, 2)
-        final_marks['english_final_total'] += card.english_total
-        final_marks['english_final_percentage'] = round((final_marks['english_final_total'] / (i * max_marks_per_subject)) * 100, 2)
-        final_marks['maths_final_total'] += card.maths_total
-        final_marks['maths_final_percentage'] = round((final_marks['maths_final_total'] / (i * max_marks_per_subject)) * 100, 2)
-        final_marks['science_final_total'] += card.science_total
-        final_marks['science_final_percentage'] = round((final_marks['science_final_total'] / (i * max_marks_per_subject)) * 100, 2)
-        final_marks['sst_evs_final_total'] += card.sst_evs_total
-        final_marks['sst_evs_final_percentage'] = round((final_marks['sst_evs_final_total'] / (i * max_marks_per_subject)) * 100, 2)
-        final_marks['drawing_final_total'] += card.drawing_total
-        final_marks['drawing_final_percentage'] = round((final_marks['drawing_final_total'] / (i * max_marks_per_subject)) * 100, 2)
-        final_marks['computer_music_final_total'] += card.computer_music_total
-        final_marks['computer_music_final_percentage'] = round((final_marks['computer_music_final_total'] / (i * max_marks_per_subject)) * 100, 2)
-        final_marks['gk_final_total'] += card.gk_total
-        final_marks['gk_final_percentage'] = round((final_marks['gk_final_total'] / (i * max_marks_per_subject)) * 100, 2)
-        final_marks['punjabi_skt_final_total'] += card.punjabi_skt_total
-        final_marks['punjabi_skt_final_percentage'] = round((final_marks['punjabi_skt_final_total'] / (i * max_marks_per_subject)) * 100, 2)
-        card.term_number = i
-        i+=1
-    
-    # convert to grades
-    final_marks['drawing_final_total'] = grade_this_score(final_marks['drawing_final_total'], max_marks_per_subject*3)
-    final_marks['computer_music_final_total'] = grade_this_score(final_marks['computer_music_final_total'], max_marks_per_subject*3)
-    final_marks['gk_final_total'] = grade_this_score(final_marks['gk_final_total'], max_marks_per_subject*3)
-    for card in scorecards:
-        card.drawing_total = grade_this_score(card.drawing_total, max_marks_per_subject)
-        card.computer_music_total = grade_this_score(card.computer_music_total, max_marks_per_subject)
-        card.gk_total = grade_this_score(card.gk_total, max_marks_per_subject)
+    class_level = student.batch.current_class
+    max_marks_per_subject = 100 if class_level >= 6 else 50
+    theory_max = 80 if class_level >= 6 else 40
+    assess_max = 20 if class_level >= 6 else 10
+    pass_marks = 35 if class_level >= 6 else 18
 
-    card_ids = [card.id for card in scorecards]
-    sheet_template = 'scorecard_pdf/primary/'
-    scorecard = []
-    if student.batch.current_class > 8:
-        sheet_template = 'scorecard_pdf/sen_sec/'
-    elif student.batch.current_class > 5:
-        sheet_template = 'scorecard_pdf/sec/'
-    if sem < 4:
-        scorecard = [card for card in scorecards if sem == card.term_number][0]
-        sheet_template += 'sem_card.html'
+    scorecards = Scorecard.objects.filter(student=student).order_by('marksheet_id__term')
+
+    subject_list = [
+        {'name': 'Hindi', 'key': 'hindi', 'graded': False},
+        {'name': 'English', 'key': 'english', 'graded': False},
+        {'name': 'Maths', 'key': 'maths', 'graded': False},
+        {'name': 'Science', 'key': 'science', 'graded': False},
+        {'name': 'SST/EVS', 'key': 'sst_evs', 'graded': False},
+        {'name': 'Punjabi/Skt', 'key': 'punjabi_skt', 'graded': False},
+        {'name': 'Drawing', 'key': 'drawing', 'graded': True},
+        {'name': 'Computer/Music', 'key': 'computer_music', 'graded': True},
+        {'name': 'GK', 'key': 'gk', 'graded': True},
+    ]
+
+    if class_level <= 5:
+        show_keys = ['hindi', 'english', 'maths', 'sst_evs', 'drawing', 'computer_music', 'gk']
+    elif 6 <= class_level <= 8:
+        show_keys = ['hindi', 'english', 'maths', 'science', 'sst_evs', 'punjabi_skt', 'computer_music', 'gk']
     else:
-        scorecard = scorecards[0]
-        sheet_template += 'full_card.html'
-    template = render_to_string(sheet_template, {
-        'student': student,
-        'scorecards': scorecards,
-        'card_ids': card_ids,
-        'card': scorecard,
-    } | {**final_marks})
+        show_keys = ['hindi', 'english', 'maths', 'science', 'sst_evs']
+
+    main_keys = [s['key'] for s in subject_list if s['key'] in show_keys and not s['graded']]
+    graded_keys = [s['key'] for s in subject_list if s['key'] in show_keys and s['graded']]
+    num_main_subjects = len(main_keys)
+
+    final_marks = {f'{key}_final_total': 0 for key in show_keys}
+    final_marks.update({f'{key}_final_percentage': 0 for key in show_keys})
+    completed_counts = defaultdict(int)
+
+    for index, card in enumerate(scorecards):
+        card.term_number = index + 1
+        for sub in subject_list:
+            key = sub['key']
+            theory = getattr(card, f'{key}_theory', 0)
+            assessment = getattr(card, f'{key}_assessment', 0)
+            total = theory + assessment
+            setattr(card, f'{key}_total', total)
+            if key in show_keys:
+                final_marks[f'{key}_final_total'] += total
+                if total > 0 and key in graded_keys:
+                    completed_counts[key] += 1
+
+        card.term_total = sum(getattr(card, f'{key}_total') for key in main_keys)
+        max_term_total = num_main_subjects * max_marks_per_subject
+        card.term_percentage = round((card.term_total / max_term_total * 100) if max_term_total > 0 else 0, 2)
+
+        for key in graded_keys:
+            score = getattr(card, f'{key}_total')
+            setattr(card, f'{key}_total', grade_this_score(score, max_marks_per_subject))
+
+    num_terms = len(scorecards)
+    for key in show_keys:
+        total_sum = final_marks[f'{key}_final_total']
+        final_marks[f'{key}_final_percentage'] = round((total_sum / (num_terms * max_marks_per_subject)) * 100, 2) if num_terms > 0 else 0
+
+    for key in graded_keys:
+        num_completed = completed_counts[key]
+        if num_completed > 0:
+            avg_score = final_marks[f'{key}_final_total'] / num_completed
+            final_grade = grade_this_score(avg_score, max_marks_per_subject)
+        else:
+            final_grade = 'F'
+        final_marks[f'{key}_final_total'] = final_grade
+
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'inline; filename="scorecard_{student.student_id}.pdf"'
-
     doc = SimpleDocTemplate(response, pagesize=A4, leftMargin=0.5*inch, rightMargin=0.5*inch, topMargin=0.5*inch, bottomMargin=0.5*inch)
     elements = []
     styles = getSampleStyleSheet()
 
-    # Student Result Section
     elements.append(Paragraph("Student Result", styles['Heading1']))
     elements.append(Spacer(1, 0.1*inch))
 
-    data_student = [
-        ['Student Name', student.name],
-        ['Class', card.marksheet_id.forclass],
-        ['Roll Number', student.roll_number],
-    ]
-    t_student = Table(data_student, colWidths=[2*inch, 2*inch])
-    t_student.setStyle(TableStyle([
-        ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('FONTSIZE', (0, 0), (-1, -1), 10),
-        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ('LEFTPADDING', (0, 0), (-1, -1), 5),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 5),
-        ('TOPPADDING', (0, 0), (-1, -1), 5),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
-    ]))
-    elements.append(t_student)
-    elements.append(Spacer(1, 0.2*inch))
+    card = next((card for card in scorecards if card.term_number == sem), scorecards[0]) if sem < 4 else scorecards[0] if scorecards else None
+    if card:
+        data_student = [
+            ['Student Name', student.name],
+            ['Class', card.marksheet_id.forclass],
+            ['Roll Number', student.roll_number],
+        ]
+        t_student = Table(data_student, colWidths=[2*inch, 2*inch])
+        t_student.setStyle(TableStyle([
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('FONTSIZE', (0, 0), (-1, -1), 10),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 5),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 5),
+            ('TOPPADDING', (0, 0), (-1, -1), 5),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
+        ]))
+        elements.append(t_student)
+        elements.append(Spacer(1, 0.2*inch))
 
-    # Term Data
-    terms = [
-        {
-            'term': 'Term 1',
-            'data': [
-                ['Subject', 'Max Marks', '', 'Pass Marks', 'Obtained Marks', '', ''],
-                ['', 'Theory', 'Assessment', '', 'Theory', 'Assessment', 'Total'],
-                ['Hindi', '40', '10', '18', '40', '10', '50'],
-                ['English', '40', '10', '18', '40', '10', '50'],
-                ['Maths', '40', '10', '18', '40', '10', '50'],
-                ['SST/EVS', '40', '10', '18', '40', '10', '50'],
-                ['Drawing', '40', '10', '18', '40', '10', 'A++'],
-                ['Computer/Music', '40', '10', '18', '0', '0', 'F'],
-                ['GK', '40', '10', '18', '40', '10', 'A++'],
-                ['Total', '', '', '', '', '', '200']
-            ]
-        },
-        {
-            'term': 'Term 2',
-            'data': [
-                ['Subject', 'Max Marks', '', 'Pass Marks', 'Obtained Marks', '', ''],
-                ['', 'Theory', 'Assessment', '', 'Theory', 'Assessment', 'Total'],
-                ['Hindi', '40', '10', '18', '40', '10', '50'],
-                ['English', '40', '10', '18', '40', '0', '40'],
-                ['Maths', '40', '10', '18', '0', '0', '0'],
-                ['SST/EVS', '40', '10', '18', '0', '0', '0'],
-                ['Drawing', '40', '10', '18', '0', '0', 'F'],
-                ['Computer/Music', '40', '10', '18', '0', '0', 'F'],
-                ['GK', '40', '10', '18', '0', '0', 'F'],
-                ['Total', '', '', '', '', '', '90']
-            ]
-        },
-        {
-            'term': 'Term 3',
-            'data': [
-                ['Subject', 'Max Marks', '', 'Pass Marks', 'Obtained Marks', '', ''],
-                ['', 'Theory', 'Assessment', '', 'Theory', 'Assessment', 'Total'],
-                ['Hindi', '40', '10', '18', '0', '0', '0'],
-                ['English', '40', '10', '18', '0', '0', '0'],
-                ['Maths', '40', '10', '18', '0', '0', '0'],
-                ['SST/EVS', '40', '10', '18', '0', '0', '0'],
-                ['Drawing', '40', '10', '18', '0', '0', 'F'],
-                ['Computer/Music', '40', '10', '18', '0', '0', 'F'],
-                ['GK', '40', '10', '18', '0', '0', 'F'],
-                ['Total', '', '', '', '', '', '0']
-            ]
-        }
-    ]
+    selected_cards = [card] if sem < 4 else scorecards
+    terms = []
+    for card in selected_cards:
+        term_data = [
+            ['Subject', 'Max Marks', '', 'Pass Marks', 'Obtained Marks', '', ''],
+            ['', 'Theory', 'Assessment', '', 'Theory', 'Assessment', 'Total'],
+        ]
+        for sub in [s for s in subject_list if s['key'] in show_keys]:
+            key = sub['key']
+            th = getattr(card, f'{key}_theory', 0)
+            ass = getattr(card, f'{key}_assessment', 0)
+            tot = getattr(card, f'{key}_total')
+            term_data.append([sub['name'], str(theory_max), str(assess_max), str(pass_marks), str(th), str(ass), str(tot)])
+        term_data.append(['Total', '', '', '', '', '', str(card.term_total)])
+        terms.append({'term': f'Term {card.term_number}', 'data': term_data})
 
-    # Add terms to elements
     for term in terms:
         elements.append(Paragraph(term['term'], styles['Heading2']))
-        t = Table(term['data'], colWidths=[1.5*inch, 0.75*inch, 0.75*inch, 0.75*inch, 0.75*inch, 0.75*inch, 0.75*inch])
+        t = Table(term['data'], colWidths=[1.5*inch, 0.75*inch, 0.9*inch, 0.75*inch, 0.75*inch, 0.9*inch, 0.75*inch])
         t.setStyle(TableStyle([
             ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
-            ('SPAN', (1, 0), (2, 0)),  # Max Marks
-            ('SPAN', (4, 0), (6, 0)),  # Obtained Marks
-            ('SPAN', (0, -1), (5, -1)),  # Total label span
+            ('SPAN', (1, 0), (2, 0)),
+            ('SPAN', (4, 0), (6, 0)),
+            ('SPAN', (0, -1), (5, -1)),
             ('ALIGN', (0, -1), (5, -1), 'RIGHT'),
             ('ALIGN', (0, 0), (0, -1), 'LEFT'),
             ('ALIGN', (1, 0), (-1, -1), 'CENTER'),
@@ -407,34 +351,36 @@ def scorecard_pdf_download(request, student_id, sem):
         elements.append(t)
         elements.append(Spacer(1, 0.2*inch))
 
-    # Overall Summary
-    overall_summary = [
-        ['Subject', 'Obtained Marks', '', '', 'Total', 'Percentage'],
-        ['', 'Term 1', 'Term 2', 'Term 3', '', ''],
-        ['Hindi', '50', '50', '0', '100', '66.67'],
-        ['English', '50', '40', '0', '90', '60.0'],
-        ['Maths', '50', '0', '0', '50', '33.33'],
-        ['Drawing', 'A++', 'F', 'F', 'A++', '33.33'],
-        ['Computer/Music', 'F', 'F', 'F', 'F', '0.0'],
-        ['GK', 'A++', 'F', 'F', 'A++', '33.33']
-    ]
+    if sem >= 4:
+        num_terms = len(scorecards)
+        overall_summary = [
+            ['Subject', 'Obtained Marks', '', '', 'Total', 'Percentage'],
+            [''] + [ 'term ' + str(i) for i in range(1,4)] + ['', ''],
+        ]
+        for sub in [s for s in subject_list if s['key'] in show_keys]:
+            key = sub['key']
+            term_totals = [str(getattr(c, f'{key}_total')) for c in scorecards]
+            tot = final_marks[f'{key}_final_total']
+            perc = final_marks[f'{key}_final_percentage']
+            overall_summary.append([sub['name']] + term_totals + [str(tot), str(perc)])
 
-    elements.append(Paragraph("Overall Summary", styles['Heading2']))
-    t_summary = Table(overall_summary, colWidths=[1.5*inch, 0.75*inch, 0.75*inch, 0.75*inch, 0.75*inch, 0.75*inch])
-    t_summary.setStyle(TableStyle([
-        ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
-        ('SPAN', (1, 0), (3, 0)),  # Obtained Marks
-        ('ALIGN', (0, 0), (0, -1), 'LEFT'),
-        ('ALIGN', (1, 0), (-1, -1), 'CENTER'),
-        ('FONTNAME', (0, 0), (-1, 1), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, -1), 8),
-        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-        ('LEFTPADDING', (0, 0), (-1, -1), 4),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 4),
-        ('TOPPADDING', (0, 0), (-1, -1), 2),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
-    ]))
-    elements.append(t_summary)
+        col_widths = [1.5*inch] + [0.75*inch] * num_terms + [0.75*inch, 0.75*inch]
+        t_summary = Table(overall_summary, colWidths=col_widths)
+        t_summary.setStyle(TableStyle([
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
+            ('SPAN', (1, 0), (1 + num_terms - 1, 0)),
+            ('ALIGN', (0, 0), (0, -1), 'LEFT'),
+            ('ALIGN', (1, 0), (-1, -1), 'CENTER'),
+            ('FONTNAME', (0, 0), (-1, 1), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, -1), 8),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 4),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+            ('TOPPADDING', (0, 0), (-1, -1), 2),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+        ]))
+        elements.append(Paragraph("Overall Summary", styles['Heading2']))
+        elements.append(t_summary)
 
     doc.build(elements)
     return response

@@ -91,6 +91,16 @@
                     <td> <input type="number" class="input-marks" id="total-sst-{{card.id}}" readonly> </td>
                     <td> <input type="number" class="input-marks" id="percentage-sst-{{card.id}}" readonly> </td>
                 </tr>
+                <tr>
+                    <td>Punjabi/Sanskrit</td>
+                    <td>80</td>
+                    <td>20</td>
+                    <td>35</td>
+                    <td> <input id="punjabi_skt_theory_{{card.id}}" class="input-marks" type="number" oninput="adjust_term_marks('{{card.id}}')" value="{{card.punjabi_skt_theory}}"> </td>
+                    <td> <input id="punjabi_skt_assessment_{{card.id}}" class="input-marks" type="number" oninput="adjust_term_marks('{{card.id}}')" value="{{card.punjabi_skt_assessment}}"> </td>
+                    <td> <input type="number" class="input-marks" id="total-punjabi_skt-{{card.id}}" readonly> </td>
+                    <td> <input type="number" class="input-marks" id="percentage-punjabi_skt-{{card.id}}" readonly> </td>
+                </tr>
                 <!-- <tr>
                     <td>Drawing</td>
                     <td>80</td>
@@ -185,6 +195,14 @@
                     <td> <input type="number" class="input-marks" id="percentage-sst" readonly> </td>
                 </tr>
                 <tr>
+                    <td>Punjabi/Sanskrit</td>
+                    {% for id in card_ids %}
+                        <td> <input type="number" class="input-marks" id="punjabi_skt-term{{id}}" readonly> </td>
+                    {% endfor %}
+                    <td> <input type="number" class="input-marks" id="total-punjabi_skt" readonly> </td>
+                    <td> <input type="number" class="input-marks" id="percentage-punjabi_skt" readonly> </td>
+                </tr>
+                <tr>
                     <td>Computer/Music</td>
                     {% for id in card_ids %}
                         <td> <input type="number" class="input-marks" id="computer-term{{id}}" readonly> </td>
@@ -225,7 +243,8 @@
             {name: 'sst', theory: 'sst_evs_theory', assessment: 'sst_evs_assessment', total: 'total-sst', percentage: 'percentage-sst'},
             {name: 'drawing', theory: 'drawing_theory', assessment: 'drawing_assessment', total: 'total-drawing', percentage: 'percentage-drawing'},
             {name: 'computer', theory: 'computer_theory', assessment: 'computer_assessment', total: 'total-computer', percentage: 'percentage-computer'},
-            {name: 'gk', theory: 'gk_theory', assessment: 'gk_assessment', total: 'total-gk', percentage: 'percentage-gk'}
+            {name: 'gk', theory: 'gk_theory', assessment: 'gk_assessment', total: 'total-gk', percentage: 'percentage-gk'},
+            {name: 'punjabi_skt', theory: 'punjabi_skt_theory', assessment: 'punjabi_skt_assessment', total: 'total-punjabi_skt', percentage: 'percentage-punjabi_skt'},
         ];
 
         // per-term totals & copy to summary-term fields
