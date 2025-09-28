@@ -1,6 +1,5 @@
 """ views for marksheet app """
 from django.http import HttpResponse
-from xhtml2pdf import pisa
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from notebooks.views import get_max_id_function
